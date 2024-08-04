@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
 
     // MARK: - Properties
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) private var presentationMode
 
     @EnvironmentObject private var configuration: Configuration
 
@@ -302,7 +302,7 @@ private extension ContentView {
     var toolbarCloseButton: some View {
         Button(
             action: {
-                print("Close button did tap")
+                presentationMode.wrappedValue.dismiss()
             },
             label: {
                 Text("Close")
