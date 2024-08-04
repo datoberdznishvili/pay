@@ -15,6 +15,7 @@ public func open(from sourceViewController: UIViewController, configuration: Con
                 .environmentObject(configuration)
         }
     )
+    newViewController.modalPresentationStyle = .fullScreen
     sourceViewController.present(
         newViewController,
         animated: true
