@@ -28,6 +28,7 @@ final class ContentViewModel: ObservableObject {
     private let errorSubject = PassthroughSubject<NetworkError, Never>()
     private let updateCardNumberSubject = PassthroughSubject<String, Never>()
     private let dismissSubject = PassthroughSubject<Void, Never>()
+    private let navigateToWebViewSubject = PassthroughSubject<Void, Never>()
 
     // MARK: - Published internal properties
     @Published var isLoading = false
@@ -96,7 +97,7 @@ final class ContentViewModel: ObservableObject {
                 case .success:
                     successCompletionHandler()
                 case .otpWasRequired(let url):
-                    break
+                    openWebView(withURL: url)
                 case .failure:
                     failureCompletionHandler()
                 }
@@ -135,15 +136,23 @@ final class ContentViewModel: ObservableObject {
 // MARK: - Publishers
 extension ContentViewModel {
     var errorPublisher: AnyPublisher<NetworkError, Never> {
-        errorSubject.eraseToAnyPublisher()
+        errorSubject
+            .eraseToAnyPublisher()
     }
 
     var updateCardNumberPublisher: AnyPublisher<String, Never> {
-        updateCardNumberSubject.eraseToAnyPublisher()
+        updateCardNumberSubject
+            .eraseToAnyPublisher()
+    }
+
+    var navigateToWebView: AnyPublisher<Void, Never> {
+        navigateToWebViewSubject
+            .eraseToAnyPublisher()
     }
 
     var dismissPublisher: AnyPublisher<Void, Never> {
-        dismissSubject.eraseToAnyPublisher()
+        dismissSubject
+            .eraseToAnyPublisher()
     }
 }
 
@@ -155,5 +164,9 @@ private extension ContentViewModel {
 
         let formattedCardNumber = cardNumberFormatter.format(cardNumber, for: cardBrand)
         updateCardNumberSubject.send(formattedCardNumber)
+    }
+
+    func openWebView(withURL url: URL) {
+        
     }
 }

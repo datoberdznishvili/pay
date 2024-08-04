@@ -16,6 +16,11 @@ struct ContentView: View {
 
     @StateObject private var viewModel: ContentViewModel
 
+
+
+    @State private var isWebViewPresented = false
+
+
     @State private var number = ""
     @State private var expirationDate = ""
     @State private var cvv = ""
@@ -73,6 +78,18 @@ struct ContentView: View {
                             isPresented: $isExpirationDatePickerPresented
                         )
                 }
+
+                NavigationLink(
+                    destination: WebView(
+                        url: URL(string: "https://google.com")!,
+                        onNavigation: { url in
+                            print("URL: \(url.absoluteString)")
+                        }
+                    ),
+                    isActive: $isWebViewPresented
+                ) {
+                    EmptyView()
+                }
             }
         }
         .disabled(viewModel.isLoading)
@@ -84,13 +101,21 @@ struct ContentView: View {
             )
         }
         .onReceive(
-            viewModel.errorPublisher.receive(on: DispatchQueue.main)
+            viewModel.errorPublisher
+                .receive(on: DispatchQueue.main)
         ) { error in
             alertMessage = error.localizedDescription
             isAlertPresented = true
         }
         .onReceive(
-            viewModel.dismissPublisher.receive(on: DispatchQueue.main)
+            viewModel.navigateToWebView
+                .receive(on: DispatchQueue.main)
+        ) {
+            isWebViewPresented = true
+        }
+        .onReceive(
+            viewModel.dismissPublisher
+                .receive(on: DispatchQueue.main)
         ) {
             presentationMode.wrappedValue.dismiss()
         }
