@@ -7,6 +7,12 @@
 
 import Foundation
 
+public final class DependencyGraphRegistration {
+    public static func registerAllServices() {
+        DependencyGraph.registerAllServices()
+    }
+}
+
 final class DependencyGraph {
     // MARK: - Properties
     static let shared = DependencyGraph()
@@ -15,6 +21,36 @@ final class DependencyGraph {
 
     // MARK: - Init
     private init() { }
+}
+
+// MARK: - Public API
+extension DependencyGraph {
+    static func registerAllServices() {
+        DependencyGraph.shared.register(
+            DefaultNetworkService(
+                baseURL: URL(string: "https://paygate.payze.dev")!
+            ),
+            for: NetworkService.self
+        )
+
+        DependencyGraph.shared.register(
+            DefaultPayUseCase(),
+            for: PayUseCase.self
+        )
+        DependencyGraph.shared.register(
+            LocalGetCardBrandUseCase(),
+            for: GetCardBrandUseCase.self
+        )
+        DependencyGraph.shared.register(
+            DefaultGetTransactionDetailsUseCase(),
+            for: GetTransactionDetailsUseCase.self
+        )
+
+        DependencyGraph.shared.register(
+            DefaultCardNumberFormatter(),
+            for: CardNumberFormatter.self
+        )
+    }
 }
 
 // MARK: - Internal API
