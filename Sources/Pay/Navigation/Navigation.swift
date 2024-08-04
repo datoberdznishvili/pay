@@ -21,4 +21,6 @@ public final class Navigation {
             animated: true
         )
     }
+
+    public init() { }
 }
