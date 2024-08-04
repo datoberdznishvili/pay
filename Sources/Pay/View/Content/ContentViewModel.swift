@@ -91,21 +91,22 @@ final class ContentViewModel: ObservableObject {
                 self.isLoading = false
             }
 
-            switch result {
-            case .success(let response):
-                switch response {
-                case .success:
-                    successCompletionHandler()
-                case .otpWasRequired(let url):
-                    openWebView(withURL: url)
-                case .failure:
-                    failureCompletionHandler()
-                }
-            case .failure:
-                failureCompletionHandler()
-            }
-
-            dismissSubject.send(())
+            openWebView()
+//            switch result {
+//            case .success(let response):
+//                switch response {
+//                case .success:
+//                    successCompletionHandler()
+//                case .otpWasRequired(let url):
+//                    openWebView(withURL: url)
+//                case .failure:
+//                    failureCompletionHandler()
+//                }
+//            case .failure:
+//                failureCompletionHandler()
+//            }
+//
+//            dismissSubject.send(())
         }
     }
 
@@ -166,7 +167,7 @@ private extension ContentViewModel {
         updateCardNumberSubject.send(formattedCardNumber)
     }
 
-    func openWebView(withURL url: URL) {
-        
+    func openWebView() {
+        navigateToWebViewSubject.send(())
     }
 }
