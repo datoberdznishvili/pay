@@ -7,10 +7,8 @@
 
 import Foundation
 
-public final class DependencyGraphRegistration {
-    public static func registerAllServices() {
-        DependencyGraph.registerAllServices()
-    }
+public func initialize() {
+    DependencyGraph.registerAllServices()
 }
 
 final class DependencyGraph {
