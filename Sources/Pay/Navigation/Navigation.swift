@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-public final class PayNavigation {
+public final class Navigation {
     func navigate(from sourceViewController: UIViewController, configuration: Configuration) {
         let newViewController = UIHostingController(
             rootView: NavigationView {

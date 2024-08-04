@@ -56,13 +56,13 @@ public extension Configuration {
             stroke: MyColor? = nil,
             negative: MyColor? = nil
         ) {
-            self.brand = brand?.colorValue ?? .payBrand
-            self.textPrimary = textPrimary?.colorValue ?? .payTextPrimary
-            self.textSecondary = textSecondary?.colorValue ?? .payTextSecondary
-            self.background = background?.colorValue ?? .payBackground
-            self.surface = surface?.colorValue ?? .paySurface
-            self.stroke = stroke?.colorValue ?? .payStroke
-            self.negative = negative?.colorValue ?? .payNegative
+            self.brand = brand?.colorValue ?? Color("payBrand", bundle: .module)
+            self.textPrimary = textPrimary?.colorValue ?? Color("payTextPrimary", bundle: .module)
+            self.textSecondary = textSecondary?.colorValue ?? Color("payTextSecondary", bundle: .module)
+            self.background = background?.colorValue ?? Color("payBackground", bundle: .module)
+            self.surface = surface?.colorValue ?? Color("paySurface", bundle: .module)
+            self.stroke = stroke?.colorValue ?? Color("payStroke", bundle: .module)
+            self.negative = negative?.colorValue ?? Color("payNegative", bundle: .module)
         }
     }
 }
