@@ -19,7 +19,7 @@ struct ContentView: View {
 
 
     @State private var isWebViewPresented = false
-
+    @State private var urlForWebView: URL = URL(string: "https://barcamania.ge")!
 
     @State private var number = ""
     @State private var expirationDate = ""
@@ -80,12 +80,14 @@ struct ContentView: View {
                 }
 
                 NavigationLink(
-                    destination: WebView(
-                        url: URL(string: "https://google.com")!,
-                        onNavigation: { url in
-                            print("URL: \(url.absoluteString)")
-                        }
-                    ),
+                    destination: {
+                        WebView(
+                            url: urlForWebView,
+                            onNavigation: { url in
+                                viewModel.webViewDidNavigate(to: url)
+                            }
+                        )
+                    }(),
                     isActive: $isWebViewPresented
                 ) {
                     EmptyView()
@@ -110,13 +112,16 @@ struct ContentView: View {
         .onReceive(
             viewModel.navigateToWebView
                 .receive(on: DispatchQueue.main)
-        ) {
+        ) { url in
+            print("Should open webView")
+            urlForWebView = url
             isWebViewPresented = true
         }
         .onReceive(
             viewModel.dismissPublisher
                 .receive(on: DispatchQueue.main)
         ) {
+            isWebViewPresented = false
             presentationMode.wrappedValue.dismiss()
         }
         .onAppear(perform: viewModel.viewDidAppear)

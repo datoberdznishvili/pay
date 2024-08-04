@@ -22,7 +22,7 @@ final class DefaultPayUseCase: PayUseCase {
 //            .map(PayResponseDTOToDomainMapper().map(_:))
         .success(
             .otpWasRequired(
-                url: URL(string: "https://google.com")!
+                url: URL(string: "https://barcamania.ge/")!
             )
         )
     }

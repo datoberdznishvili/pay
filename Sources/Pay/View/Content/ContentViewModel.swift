@@ -17,6 +17,10 @@ final class ContentViewModel: ObservableObject {
 
     @Injected private var configuration: Configuration
 
+    // TODO: Update values
+    private let successDestinationURLString = "https://barcamania.ge/contact.html"
+    private let failureDestinationURLString = "https://barcamania.ge/blog/"
+
     private let transactionId: String
     private let successCompletionHandler: () -> Void
     private let failureCompletionHandler: () -> Void
@@ -28,7 +32,7 @@ final class ContentViewModel: ObservableObject {
     private let errorSubject = PassthroughSubject<NetworkError, Never>()
     private let updateCardNumberSubject = PassthroughSubject<String, Never>()
     private let dismissSubject = PassthroughSubject<Void, Never>()
-    private let navigateToWebViewSubject = PassthroughSubject<Void, Never>()
+    private let navigateToWebViewSubject = PassthroughSubject<URL, Never>()
 
     // MARK: - Published internal properties
     @Published var isLoading = false
@@ -96,16 +100,17 @@ final class ContentViewModel: ObservableObject {
                 switch response {
                 case .success:
                     successCompletionHandler()
+                    dismissSubject.send(())
                 case .otpWasRequired(let url):
                     openWebView(withURL: url)
                 case .failure:
                     failureCompletionHandler()
+                    dismissSubject.send(())
                 }
             case .failure:
                 failureCompletionHandler()
+                dismissSubject.send(())
             }
-
-            dismissSubject.send(())
         }
     }
 
@@ -131,6 +136,20 @@ final class ContentViewModel: ObservableObject {
             }
         }
     }
+
+    func webViewDidNavigate(to url: URL) {
+        print("\(#function): \(url.absoluteString)")
+
+        if url.absoluteString == successDestinationURLString {
+            print("User did reach success case")
+            successCompletionHandler()
+            dismissSubject.send(())
+        } else if url.absoluteString == failureDestinationURLString {
+            print("User did reach failure case")
+            failureCompletionHandler()
+            dismissSubject.send()
+        }
+    }
 }
 
 // MARK: - Publishers
@@ -145,7 +164,7 @@ extension ContentViewModel {
             .eraseToAnyPublisher()
     }
 
-    var navigateToWebView: AnyPublisher<Void, Never> {
+    var navigateToWebView: AnyPublisher<URL, Never> {
         navigateToWebViewSubject
             .eraseToAnyPublisher()
     }
@@ -167,6 +186,6 @@ private extension ContentViewModel {
     }
 
     func openWebView(withURL url: URL) {
-        navigateToWebViewSubject.send(())
+        navigateToWebViewSubject.send((url))
     }
 }
