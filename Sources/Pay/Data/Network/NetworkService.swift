@@ -17,17 +17,14 @@ protocol NetworkService {
 final class DefaultNetworkService: NetworkService {
 
     // MARK: - Properties
-    private let logger = Logger(subsystem: "pay-showroom", category: "Network")
+    private let logger = Logger(subsystem: "pay", category: "Network")
 
-    private var baseURL: URL
+    private let baseURL: URL
 
     // MARK: - Init
-    init(baseURL: URL) {
-        self.baseURL = baseURL
-    }
-
-    func setBaseURL(_ baseURL: URL) {
-        self.baseURL = baseURL
+    init() {
+        @Injected var configuration: Configuration
+        self.baseURL = configuration.environment.baseURL
     }
 
     func request<T: Decodable>(_ request: Request) async -> Result<T, NetworkError> {

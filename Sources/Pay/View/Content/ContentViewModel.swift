@@ -15,7 +15,11 @@ final class ContentViewModel: ObservableObject {
     @Injected private var getCardBrandUseCase: GetCardBrandUseCase
     @Injected private var getTransactionDetailsUseCase: GetTransactionDetailsUseCase
 
-    private var configuration: Configuration?
+    @Injected private var configuration: Configuration
+
+    private let transactionId: String
+    private let successCompletionHandler: () -> Void
+    private let failureCompletionHandler: () -> Void
 
     private var getCardBrandTask: Task<Void, Never>?
 
@@ -30,11 +34,20 @@ final class ContentViewModel: ObservableObject {
     @Published var cardBrand: CardBrand?
     @Published var amount: Money?
 
+    init(
+        transactionId: String,
+        successCompletionHandler: @escaping () -> Void,
+        failureCompletionHandler: @escaping () -> Void
+    ) {
+        self.transactionId = transactionId
+        self.successCompletionHandler = successCompletionHandler
+        self.failureCompletionHandler = failureCompletionHandler
+    }
+
     // MARK: - Functions
 
-    func viewDidAppear(withConfiguration configuration: Configuration) {
-        self.configuration = configuration
-        fetchTransactionDetails(for: configuration.transactionId)
+    func viewDidAppear() {
+        fetchTransactionDetails(for: transactionId)
     }
 
     func fetchTransactionDetails(for transactionId: String) {
@@ -62,7 +75,6 @@ final class ContentViewModel: ObservableObject {
         securityNumber: String
     ) {
         isLoading = true
-        guard let transactionId = configuration?.transactionId else { return }
         Task {
             let result = await payUseCase.execute(
                 parameters: PayParameters(
@@ -80,9 +92,9 @@ final class ContentViewModel: ObservableObject {
 
             switch result {
             case .success:
-                configuration?.successCompletionHandler()
+                successCompletionHandler()
             case .failure:
-                configuration?.failureCompletionHandler()
+                failureCompletionHandler()
             }
 
             dismissSubject.send(())

@@ -19,11 +19,14 @@ final class DependencyGraph {
 
 // MARK: - Public API
 extension DependencyGraph {
-    static func registerAllServices() {
+    static func registerAllServices(using configuration: Configuration) {
         DependencyGraph.shared.register(
-            DefaultNetworkService(
-                baseURL: URL(string: "https://paygate.payze.dev")!
-            ),
+            configuration,
+            for: Configuration.self
+        )
+
+        DependencyGraph.shared.register(
+            DefaultNetworkService(),
             for: NetworkService.self
         )
 

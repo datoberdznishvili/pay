@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FooterView: View {
 
-    @EnvironmentObject private var configuration: Configuration
+    @Injected private var configuration: Configuration
 
     var body: some View {
         VStack(spacing: 4) {
@@ -30,6 +30,5 @@ struct FooterView: View {
     VStack {
         Spacer()
         FooterView()
-            .environmentObject(Configuration.example)
     }
 }

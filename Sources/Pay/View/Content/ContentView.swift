@@ -12,9 +12,9 @@ struct ContentView: View {
     // MARK: - Properties
     @Environment(\.presentationMode) private var presentationMode
 
-    @EnvironmentObject private var configuration: Configuration
+    @Injected private var configuration: Configuration
 
-    @StateObject private var viewModel = ContentViewModel()
+    @StateObject private var viewModel: ContentViewModel
 
     @State private var number = ""
     @State private var expirationDate = ""
@@ -34,6 +34,10 @@ struct ContentView: View {
     @State private var isAlertPresented = false
     @State private var alertTitle = "Error occurred"
     @State private var alertMessage = ""
+
+    init(viewModel: ContentViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
 
     // MARK: - Body
     var body: some View {
@@ -90,9 +94,7 @@ struct ContentView: View {
         ) {
             presentationMode.wrappedValue.dismiss()
         }
-        .onAppear {
-            viewModel.viewDidAppear(withConfiguration: configuration)
-        }
+        .onAppear(perform: viewModel.viewDidAppear)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 toolbarCloseButton
@@ -322,7 +324,12 @@ private extension ContentView {
 // MARK: - Preview
 #Preview {
     NavigationView {
-        ContentView()
-            .environmentObject(Configuration.example)
+        ContentView(
+            viewModel: ContentViewModel(
+                transactionId: "",
+                successCompletionHandler: { },
+                failureCompletionHandler: { }
+            )
+        )
     }
 }

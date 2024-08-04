@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DefaultTextField: View {
-    @EnvironmentObject private var configuration: Configuration
+    @Injected private var configuration: Configuration
     
     @Binding var text: String
     @Binding var isEditing: Bool
