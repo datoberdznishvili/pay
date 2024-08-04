@@ -91,8 +91,15 @@ final class ContentViewModel: ObservableObject {
             }
 
             switch result {
-            case .success:
-                successCompletionHandler()
+            case .success(let response):
+                switch response {
+                case .success:
+                    successCompletionHandler()
+                case .otpWasRequired(let url):
+                    break
+                case .failure:
+                    failureCompletionHandler()
+                }
             case .failure:
                 failureCompletionHandler()
             }

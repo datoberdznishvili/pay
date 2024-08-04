@@ -15,6 +15,8 @@ final class DefaultPayUseCase: PayUseCase {
     @Injected private var networkService: NetworkService
 
     func execute(parameters: PayParameters) async -> Result<PayResponse, NetworkError> {
-        await networkService.request(PayRequest(parameters: parameters))
+        await networkService
+            .request(PayRequest(parameters: parameters))
+            .map(PayResponseDTOToDomainMapper().map(_:))
     }
 }
