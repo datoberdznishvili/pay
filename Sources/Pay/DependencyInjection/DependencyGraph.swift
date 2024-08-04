@@ -7,10 +7,6 @@
 
 import Foundation
 
-public func initialize() {
-    DependencyGraph.registerAllServices()
-}
-
 final class DependencyGraph {
     // MARK: - Properties
     static let shared = DependencyGraph()
