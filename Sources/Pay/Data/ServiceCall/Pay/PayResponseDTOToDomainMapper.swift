@@ -9,14 +9,14 @@ import Foundation
 
 final class PayResponseDTOToDomainMapper {
     func map(_ dto: PayResponseDTO) -> PayResponse {
-        if dto.status {
-            return .success
-        }
-
         if dto.threeDSIsPresent {
             return .otpWasRequired(
                 url: URL(string: dto.url!)!
             )
+        }
+
+        if dto.status {
+            return .success
         }
 
         return .failure

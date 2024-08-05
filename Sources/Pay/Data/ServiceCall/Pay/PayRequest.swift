@@ -7,7 +7,7 @@
 
 struct PayRequest: Request {
     var path: String {
-        "v2/payment/pay" // TODO: v2?
+        "v2/payment/pay"
     }
 
     var method: NetworkMethod { .post }

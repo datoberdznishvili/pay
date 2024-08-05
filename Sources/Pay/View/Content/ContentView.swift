@@ -79,19 +79,7 @@ struct ContentView: View {
                         )
                 }
 
-                NavigationLink(
-                    destination: {
-                        WebView(
-                            url: urlForWebView,
-                            onNavigation: { url in
-                                viewModel.webViewDidNavigate(to: url)
-                            }
-                        )
-                    }(),
-                    isActive: $isWebViewPresented
-                ) {
-                    EmptyView()
-                }
+                navigationLinkForWebView
             }
         }
         .disabled(viewModel.isLoading)
@@ -197,6 +185,7 @@ private extension ContentView {
                 placeHolder: "Required"
             )
             .keyboardType(.numberPad)
+            .textContentType(.creditCardNumber)
             .onChange(of: number) { number in
                 viewModel.numberDidUpdate(to: number)
             }
@@ -341,6 +330,22 @@ private extension ContentView {
                     .foregroundColor(configuration.colorPalette.negative)
             }
         )
+    }
+
+    var navigationLinkForWebView: some View {
+        NavigationLink(
+            destination: {
+                WebView(
+                    url: urlForWebView,
+                    onNavigation: { url in
+                        viewModel.webViewDidNavigate(to: url)
+                    }
+                )
+            }(),
+            isActive: $isWebViewPresented
+        ) {
+            EmptyView()
+        }
     }
 }
 

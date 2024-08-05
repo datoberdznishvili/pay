@@ -9,7 +9,7 @@ public struct Pay {
 
     public init(
         font: Font,
-        colorPalette: ColorPalette,
+        colorPalette: ColorPalette = .init(),
         companyIcon: Image? = nil,
         environment: ServiceEnvironment
     ) {

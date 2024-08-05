@@ -15,13 +15,8 @@ final class DefaultGetTransactionDetailsUseCase: GetTransactionDetailsUseCase {
     @Injected private var networkService: NetworkService
 
     func execute(parameters transactionId: String) async -> Result<TransactionDetails, NetworkError> {
-        // TODO: Use dynamic value when back-end is fixed
-//        await networkService.request(GetTransactionDetailsRequest(transactionId: transactionId))
-        .success(
-            TransactionDetails(
-                amount: 123.45,
-                currency: "USD"
-            )
+        await networkService.request(
+            GetTransactionDetailsRequest(transactionId: transactionId)
         )
     }
 }

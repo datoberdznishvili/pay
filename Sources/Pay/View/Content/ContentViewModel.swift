@@ -18,8 +18,8 @@ final class ContentViewModel: ObservableObject {
     @Injected private var configuration: Configuration
 
     // TODO: Update values
-    private let successDestinationURLString = "https://barcamania.ge/contact.html"
-    private let failureDestinationURLString = "https://barcamania.ge/blog/"
+    private let successDestinationURLString = "/Success"
+    private let failureDestinationURLString = "/Fail"
 
     private let transactionId: String
     private let successCompletionHandler: () -> Void
@@ -39,6 +39,7 @@ final class ContentViewModel: ObservableObject {
     @Published var cardBrand: CardBrand?
     @Published var amount: Money?
 
+    // MARK: - Init
     init(
         transactionId: String,
         successCompletionHandler: @escaping () -> Void,
@@ -50,7 +51,6 @@ final class ContentViewModel: ObservableObject {
     }
 
     // MARK: - Functions
-
     func viewDidAppear() {
         fetchTransactionDetails(for: transactionId)
     }
@@ -68,6 +68,7 @@ final class ContentViewModel: ObservableObject {
                     )
                 }
             case .failure:
+                failureCompletionHandler()
                 dismissSubject.send(())
             }
         }
