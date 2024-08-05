@@ -17,9 +17,8 @@ final class ContentViewModel: ObservableObject {
 
     @Injected private var configuration: Configuration
 
-    // TODO: Update values
-    private let successDestinationURLString = "/Success"
-    private let failureDestinationURLString = "/Fail"
+    private let successDestinationEndpoint = "/Success"
+    private let failureDestinationEndpoint = "/Fail"
 
     private let transactionId: String
     private let successCompletionHandler: () -> Void
@@ -140,13 +139,13 @@ final class ContentViewModel: ObservableObject {
 
     func webViewDidNavigate(to url: URL) {
         print("\(#function): \(url.absoluteString)")
+        guard url.pathComponents.count == 2 else { return }
+        // `/` and `endpoint`
 
-        if url.absoluteString == successDestinationURLString {
-            print("User did reach success case")
+        if url.lastPathComponent == successDestinationEndpoint {
             successCompletionHandler()
             dismissSubject.send(())
-        } else if url.absoluteString == failureDestinationURLString {
-            print("User did reach failure case")
+        } else if url.lastPathComponent == failureDestinationEndpoint {
             failureCompletionHandler()
             dismissSubject.send()
         }
