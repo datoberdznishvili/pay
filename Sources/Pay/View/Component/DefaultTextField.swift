@@ -12,22 +12,27 @@ struct DefaultTextField: View {
     
     @Binding var text: String
     @Binding var isEditing: Bool
+    @State var errorMessage: String?
 
     var title: String
     var placeHolder: String
+    // Value -> ErrorMessage
+    var validator: ((String) -> String?)?
 
     // MARK: - Init
     init(
         text: Binding<String>,
         isEditing: Binding<Bool>,
         title: String,
-        placeHolder: String
+        placeHolder: String,
+        validator: ((String) -> String?)? = nil
     ) {
         self._text = text
         self._isEditing = isEditing
 
         self.title = title
         self.placeHolder = placeHolder
+        self.validator = validator
     }
 
     // MARK: - Body
@@ -38,30 +43,41 @@ struct DefaultTextField: View {
                 .font(.caption)
                 .bold()
 
-            ZStack {
-                TextField(placeHolder, text: $text, onEditingChanged: { editing in
-                    self.isEditing = editing
-                })
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
+            TextField(placeHolder, text: $text, onEditingChanged: { editing in
+                print("\(title) onEditingChanged to \(editing)")
+                self.isEditing = editing
+                if !isEditing {
+                    print("\(title) calling onEditingFinished")
+                    self.errorMessage = validator?(text)
+                }
+            })
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(
+                        {
+                            if isEditing {
+                                return configuration.colorPalette.brand
+                            }
+                            if errorMessage != nil {
+                                return configuration.colorPalette.negative.opacity(0.3)
+                            }
+                            return configuration.colorPalette.stroke
+                        }(),
+                        lineWidth: 1
+                    )
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(
-                                isEditing 
-                                ? configuration.colorPalette.brand
-                                : configuration.colorPalette.stroke,
-                                lineWidth: 1
-                            )
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(configuration.colorPalette.surface)
-                                    .shadow(
-                                        color: isEditing ? configuration.colorPalette.brand.opacity(0.4) : Color.clear,
-                                        radius: isEditing ? 4 : 0, x: 0, y: 0
-                                    )
+                            .fill(configuration.colorPalette.surface)
+                            .shadow(
+                                color: isEditing ? configuration.colorPalette.brand.opacity(0.4) : Color.clear,
+                                radius: isEditing ? 4 : 0, x: 0, y: 0
                             )
                     )
-            }
+            )
+
+            errorMessageLabel
         }
     }
 
@@ -70,10 +86,27 @@ struct DefaultTextField: View {
     }
 }
 
+// MARK: - Components
+private extension DefaultTextField {
+    var errorMessageLabel: some View {
+        if let errorMessage {
+            AnyView(
+                Text(errorMessage)
+                    .foregroundColor(configuration.colorPalette.negative)
+                    .font(.caption2)
+                )
+        } else {
+            AnyView(
+                EmptyView()
+            )
+        }
+    }
+}
+
 // MARK: - Preview
 #Preview {
     DefaultTextField(
-        text: .constant("Some randome text"),
+        text: .constant("Some random text"),
         isEditing: .constant(true),
         title: "Required",
         placeHolder: "Number"

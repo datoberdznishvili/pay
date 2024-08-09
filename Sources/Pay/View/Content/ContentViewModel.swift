@@ -38,6 +38,10 @@ final class ContentViewModel: ObservableObject {
     @Published var cardBrand: CardBrand?
     @Published var amount: Money?
 
+    @Published var numberFieldErrorMessage: String?
+    @Published var cvvFieldErrorMessage: String?
+    @Published var cardHolderNameFieldErrorMessage: String?
+
     // MARK: - Init
     init(
         transactionId: String,
@@ -149,6 +153,20 @@ final class ContentViewModel: ObservableObject {
             failureCompletionHandler()
             dismissSubject.send()
         }
+    }
+
+    // MARK: - Validation
+    func cvvValidator(withValue cvv: String) -> String? {
+        guard let cardBrand else { return nil }
+        guard cvv.allSatisfy(\.isNumber) else {
+            return "Use only digits"
+        }
+        guard let cvvLength = cardBrand.cvvLength else { return nil }
+        guard cvvLength == cvv.count else {
+            return "CVV should be length of \(cvvLength)"
+        }
+
+        return nil
     }
 }
 

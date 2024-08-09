@@ -16,8 +16,6 @@ struct ContentView: View {
 
     @StateObject private var viewModel: ContentViewModel
 
-
-
     @State private var isWebViewPresented = false
     @State private var urlForWebView: URL = URL(string: "https://barcamania.ge")!
 
@@ -42,6 +40,8 @@ struct ContentView: View {
 
     init(viewModel: ContentViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
+
+
     }
 
     // MARK: - Body
@@ -163,7 +163,7 @@ private extension ContentView {
         VStack(alignment: .leading, spacing: 22) {
             numberTextField
 
-            HStack {
+            HStack(alignment: .top) {
                 expirationDateTextField
 
                 if let cardBrand = viewModel.cardBrand, cardBrand.hasCVV {
@@ -252,7 +252,8 @@ private extension ContentView {
             text: $cvv, 
             isEditing: $isCVVTextFieldEditing,
             title: "CVV",
-            placeHolder: "Security Code"
+            placeHolder: "Security Code",
+            validator: viewModel.cvvValidator
         )
         .keyboardType(.numberPad)
         .onChange(of: cvv) { newValue in
