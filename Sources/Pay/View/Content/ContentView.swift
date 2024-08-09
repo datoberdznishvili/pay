@@ -113,6 +113,9 @@ struct ContentView: View {
             presentationMode.wrappedValue.dismiss()
         }
         .onAppear(perform: viewModel.viewDidAppear)
+        .alert(isPresented: $viewModel.isAlertPresented) {
+            Alert(title: Text(viewModel.errorAlertMessage ?? "There is some problem."))
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 toolbarCloseButton

@@ -38,6 +38,9 @@ final class ContentViewModel: ObservableObject {
     @Published var cardBrand: CardBrand?
     @Published var amount: Money?
 
+    @Published var errorAlertMessage: String?
+    @Published var isAlertPresented = false
+
     // MARK: - Init
     init(
         transactionId: String,
@@ -79,6 +82,21 @@ final class ContentViewModel: ObservableObject {
         expirationDate: String,
         securityNumber: String
     ) {
+        if let numberErrorMessage = numberValidator(number) {
+            showErrorMessage("Number: \(numberErrorMessage)")
+            return
+        }
+
+        if let cardHolderMessage = cardHolderNameValidator(cardHolder) {
+            showErrorMessage("CardHolder: \(cardHolderMessage)")
+            return
+        }
+
+        if let securityNumberMessage = cvvValidator(securityNumber) {
+            showErrorMessage("CVV: \(securityNumberMessage)")
+            return
+        }
+
         isLoading = true
         Task {
             let result = await payUseCase.execute(
@@ -263,4 +281,8 @@ private extension ContentViewModel {
         return sum % 10 == 0
     }
 
+    func showErrorMessage(_ message: String) {
+        errorAlertMessage = message
+        isAlertPresented = true
+    }
 }
