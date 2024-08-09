@@ -255,6 +255,12 @@ private extension ContentView {
             placeHolder: "Security Code"
         )
         .keyboardType(.numberPad)
+        .onChange(of: cvv) { newValue in
+            guard let cvvLength = viewModel.cardBrand?.cvvLength else { return }
+            if newValue.count > cvvLength {
+                cvv = String(newValue.prefix(cvvLength))
+            }
+        }
     }
 
     // MARK: CardHolder

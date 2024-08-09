@@ -48,6 +48,21 @@ enum CardBrand: Decodable {
     }
 
     var hasCVV: Bool {
-        [.visa, .mastercard, .amex].contains(self)
+        cvvLength != nil
+    }
+
+    var cvvLength: Int? {
+        switch self {
+        case .amex:
+            4
+        case .visa:
+            3
+        case .mastercard:
+            3
+        case .humo:
+            nil
+        case .uzCard:
+            nil
+        }
     }
 }
