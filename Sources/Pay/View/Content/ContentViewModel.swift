@@ -38,10 +38,6 @@ final class ContentViewModel: ObservableObject {
     @Published var cardBrand: CardBrand?
     @Published var amount: Money?
 
-    @Published var numberFieldErrorMessage: String?
-    @Published var cvvFieldErrorMessage: String?
-    @Published var cardHolderNameFieldErrorMessage: String?
-
     // MARK: - Init
     init(
         transactionId: String,
@@ -156,7 +152,44 @@ final class ContentViewModel: ObservableObject {
     }
 
     // MARK: - Validation
-    func cvvValidator(withValue cvv: String) -> String? {
+    func numberValidator(_ number: String) -> String? {
+        let number = number.removingWhitespaces()
+        if number.isEmpty {
+            return "This field should not be empty"
+        }
+
+        if number.count < 15 {
+            return "Please fill this field"
+        }
+        
+        guard let cardBrand else { return nil }
+
+        guard number.count == cardBrand.format.removingWhitespaces().count else {
+            return "Number's length should be \(cardBrand.format.removingWhitespaces().count)"
+        }
+
+        // TODO: Use Algorithm
+
+        return nil
+    }
+
+    func cardHolderNameValidator(_ cardHolderName: String) -> String? {
+        guard !cardHolderName.isEmpty else {
+            return "This field should not be empty"
+        }
+
+        guard cardHolderName
+            .components(separatedBy: " ")
+            .filter({ !$0.isEmpty })
+            .count >= 2
+        else {
+            return "Please enter full card holder name"
+        }
+
+        return nil
+    }
+
+    func cvvValidator(_ cvv: String) -> String? {
         guard let cardBrand else { return nil }
         guard cvv.allSatisfy(\.isNumber) else {
             return "Use only digits"

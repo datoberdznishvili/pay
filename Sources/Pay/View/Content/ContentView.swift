@@ -182,7 +182,8 @@ private extension ContentView {
                 text: $number, 
                 isEditing: $isNumberTextFieldEditing,
                 title: "Number",
-                placeHolder: "Required"
+                placeHolder: "Required",
+                validator: viewModel.numberValidator(_:)
             )
             .keyboardType(.numberPad)
             .textContentType(.creditCardNumber)
@@ -253,7 +254,7 @@ private extension ContentView {
             isEditing: $isCVVTextFieldEditing,
             title: "CVV",
             placeHolder: "Security Code",
-            validator: viewModel.cvvValidator
+            validator: viewModel.cvvValidator(_:)
         )
         .keyboardType(.numberPad)
         .onChange(of: cvv) { newValue in
@@ -270,7 +271,8 @@ private extension ContentView {
             text: $cardHolderName,
             isEditing: $isCardHolderNameTextFieldEditing,
             title: "Card Holder Name",
-            placeHolder: "Name"
+            placeHolder: "Name",
+            validator: viewModel.cardHolderNameValidator(_:)
         )
     }
 
