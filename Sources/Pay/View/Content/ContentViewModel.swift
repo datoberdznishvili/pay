@@ -168,7 +168,9 @@ final class ContentViewModel: ObservableObject {
             return "Number's length should be \(cardBrand.format.removingWhitespaces().count)"
         }
 
-        // TODO: Use Algorithm
+        guard isValidCardNumber(number) else {
+            return "Please enter valid card number"
+        }
 
         return nil
     }
@@ -239,4 +241,26 @@ private extension ContentViewModel {
     func openWebView(withURL url: URL) {
         navigateToWebViewSubject.send((url))
     }
+
+    func isValidCardNumber(_ cardNumber: String) -> Bool {
+        let reversedDigits = cardNumber.reversed().map { String($0) }
+
+        var sum = 0
+
+        for (index, element) in reversedDigits.enumerated() {
+            guard let digit = Int(element) else {
+                return false
+            }
+
+            if index % 2 == 1 {
+                let doubledDigit = digit * 2
+                sum += doubledDigit > 9 ? doubledDigit - 9 : doubledDigit
+            } else {
+                sum += digit
+            }
+        }
+
+        return sum % 10 == 0
+    }
+
 }
