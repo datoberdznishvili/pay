@@ -17,7 +17,7 @@ struct ContentView: View {
     @StateObject private var viewModel: ContentViewModel
 
     @State private var isWebViewPresented = false
-    @State private var urlForWebView: URL = URL(string: "https://barcamania.ge")!
+    @State private var urlForWebView: URL = URL(string: "https://google.com")!
 
     @State private var number = ""
     @State private var expirationDate = ""
@@ -83,7 +83,6 @@ struct ContentView: View {
         }
         .onReceive(
             viewModel.navigateToWebView
-                .receive(on: DispatchQueue.main)
         ) { url in
             urlForWebView = url
             isWebViewPresented = true

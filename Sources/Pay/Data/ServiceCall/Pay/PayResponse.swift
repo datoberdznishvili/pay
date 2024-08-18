@@ -9,6 +9,5 @@ import Foundation
 
 enum PayResponse {
     case success
-    case failure
     case otpWasRequired(url: URL)
 }

@@ -12,8 +12,10 @@ struct ExpirationDatePickerView: View {
     @Binding var selectedYear: Int
     @Binding var isPresented: Bool
 
+    @Injected private var configuration: Configuration
+
     private let months = Array(1...12)
-    private let years = Array(Date.currentYear...2100)
+    private let years = Array(Date.currentYear...(Date.currentYear + 5))
 
     // MARK: - Body
     var body: some View {
@@ -47,7 +49,7 @@ struct ExpirationDatePickerView: View {
                 .pickerStyle(.wheel)
             }
             .background(
-                Color.white // TODO: Should white be used directly? This is from Figma
+                configuration.colorPalette.surface
                     .ignoresSafeArea()
             )
         }
@@ -68,8 +70,6 @@ private extension ExpirationDatePickerView {
                 }
             }
         }
-//        .padding(.horizontal)
-//        .padding(.top)
         .padding(.top)
         .padding(.horizontal)
     }

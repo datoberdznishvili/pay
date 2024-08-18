@@ -7,11 +7,14 @@
 
 public enum Currency {
     case usd
+    case uzs
 
     init(backedName: String) {
         switch backedName {
         case "USD":
             self = .usd
+        case "UZS":
+            self = .uzs
         default:
             self = .usd
         }
@@ -23,6 +26,8 @@ extension Currency {
         switch self {
         case .usd:
             "$"
+        case .uzs:
+            "UZS"
         }
     }
 }

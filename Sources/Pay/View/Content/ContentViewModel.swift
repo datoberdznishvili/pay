@@ -17,8 +17,8 @@ final class ContentViewModel: ObservableObject {
 
     @Injected private var configuration: Configuration
 
-    private let successDestinationEndpoint = "/Success"
-    private let failureDestinationEndpoint = "/Fail"
+    private let successDestinationEndpoint = "Success"
+    private let failureDestinationEndpoint = "Fail"
 
     private let transactionId: String
     private let successCompletionHandler: () -> Void
@@ -113,13 +113,9 @@ final class ContentViewModel: ObservableObject {
                     dismissSubject.send(())
                 case .otpWasRequired(let url):
                     openWebView(withURL: url)
-                case .failure:
-                    failureCompletionHandler()
-                    dismissSubject.send(())
                 }
-            case .failure:
-                failureCompletionHandler()
-                dismissSubject.send(())
+            case .failure(let error):
+                showErrorMessage(error.localizedDescription)
             }
         }
     }
@@ -148,7 +144,6 @@ final class ContentViewModel: ObservableObject {
     }
 
     func webViewDidNavigate(to url: URL) {
-        print("\(#function): \(url.absoluteString)")
         guard url.pathComponents.count == 2 else { return }
         // `/` and `endpoint`
 
@@ -264,7 +259,9 @@ private extension ContentViewModel {
     }
 
     func openWebView(withURL url: URL) {
-        navigateToWebViewSubject.send((url))
+        DispatchQueue.main.async {
+            self.navigateToWebViewSubject.send((url))
+        }
     }
 
     func isValidCardNumber(_ cardNumber: String) -> Bool {
@@ -291,7 +288,6 @@ private extension ContentViewModel {
     func isFutureDate(month: String, year: String) -> Bool {
         // Ensure that the inputs are valid
         guard let monthInt = Int(month), let yearInt = Int(year), monthInt >= 1, monthInt <= 12 else {
-            print("Invalid month or year input")
             return false
         }
 
@@ -317,7 +313,6 @@ private extension ContentViewModel {
 
         // Ensure the input has exactly two components (month and year)
         guard components.count == 2 else {
-            print("Invalid format")
             return nil
         }
 
@@ -325,9 +320,7 @@ private extension ContentViewModel {
         let year = components[1]
 
         // Ensure the year has at least four characters
-        print("Year: \(year)")
         guard year.count == 4 else {
-            print("Invalid year format")
             return nil
         }
 

@@ -15,10 +15,6 @@ final class PayResponseDTOToDomainMapper {
             )
         }
 
-        if dto.status {
-            return .success
-        }
-
-        return .failure
+        return .success
     }
 }

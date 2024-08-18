@@ -6,7 +6,6 @@
 //
 
 struct PayResponseDTO: Decodable {
-    let status: Bool
     let url: String?
     let threeDSIsPresent: Bool
 }
