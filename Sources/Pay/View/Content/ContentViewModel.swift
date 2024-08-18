@@ -28,6 +28,7 @@ final class ContentViewModel: ObservableObject {
 
     private var subscriptions: Set<AnyCancellable> = []
 
+    // MARK: - Subjects
     private let errorSubject = PassthroughSubject<NetworkError, Never>()
     private let updateCardNumberSubject = PassthroughSubject<String, Never>()
     private let dismissSubject = PassthroughSubject<Void, Never>()

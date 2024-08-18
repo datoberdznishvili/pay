@@ -275,6 +275,9 @@ private extension ContentView {
             placeHolder: "Name",
             validator: viewModel.cardHolderNameValidator(_:)
         )
+        .onChange(of: cardHolderName) { newValue in
+            cardHolderName = newValue.uppercased()
+        }
     }
 
     var bottomView: some View {
