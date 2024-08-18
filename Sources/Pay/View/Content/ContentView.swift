@@ -85,7 +85,6 @@ struct ContentView: View {
             viewModel.navigateToWebView
                 .receive(on: DispatchQueue.main)
         ) { url in
-            print("Should open webView")
             urlForWebView = url
             isWebViewPresented = true
         }
@@ -172,7 +171,7 @@ private extension ContentView {
 
     // MARK: Number
     var numberTextField: some View {
-        ZStack(alignment: .center) {
+        ZStack {
             DefaultTextField(
                 text: $number, 
                 isEditing: $isNumberTextFieldEditing,
@@ -192,15 +191,14 @@ private extension ContentView {
             }
 
             if let cardBrand = viewModel.cardBrand {
-                HStack(alignment: .bottom) {
+                HStack(alignment: .top) {
                     Spacer()
 
                     cardBrand.icon
                         .resizable()
                         .frame(width: 45, height: 22)
-                        .padding(.bottom)
                         .padding(.trailing)
-                        .offset(y: 16)
+                        .padding(.top)
                 }
             }
         }
@@ -213,7 +211,8 @@ private extension ContentView {
                 text: $expirationDate,
                 isEditing: $isExpirationDateTextFieldEditing,
                 title: "Expires",
-                placeHolder: "MM / YYYY"
+                placeHolder: "MM / YYYY",
+                validator: viewModel.expirationDateValidator(_:)
             )
             .disabled(true)
             .onTapGesture {
@@ -294,7 +293,7 @@ private extension ContentView {
                 viewModel.pay(
                     number: number,
                     cardHolder: cardHolderName,
-                    expirationDate: "\(selectedMonth)/\(selectedYear)",
+                    expirationDate: expirationDate,
                     securityNumber: cvv
                 )
             },
@@ -308,7 +307,7 @@ private extension ContentView {
                         }
                     }
                     Text("Next")
-                        .foregroundColor(configuration.colorPalette.nextOnInteractive.opacity(0.4))
+                        .foregroundColor(configuration.colorPalette.nextOnInteractive)
                 }
                 .foregroundColor(configuration.colorPalette.surface)
                 .padding()

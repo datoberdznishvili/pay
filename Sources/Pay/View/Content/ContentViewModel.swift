@@ -62,6 +62,8 @@ final class ContentViewModel: ObservableObject {
         expirationDate: String,
         securityNumber: String
     ) {
+        let expirationDate = expirationDate.removingWhitespaces()
+
         if let numberErrorMessage = numberValidator(number) {
             showErrorMessage("Number: \(numberErrorMessage)")
             return
@@ -69,6 +71,16 @@ final class ContentViewModel: ObservableObject {
 
         if let cardHolderMessage = cardHolderNameValidator(cardHolder) {
             showErrorMessage("CardHolder: \(cardHolderMessage)")
+            return
+        }
+
+        if let expirationDateMessage = expirationDateValidator(expirationDate) {
+            showErrorMessage("Expiration Date: \(expirationDateMessage)")
+            return
+        }
+
+        guard let shortenedExpirationDate = shortenYear(in: expirationDate) else {
+            showErrorMessage("Please enter valid expiration date")
             return
         }
 
@@ -84,7 +96,7 @@ final class ContentViewModel: ObservableObject {
                     transactionId: transactionId,
                     number: number,
                     cardHolder: cardHolder,
-                    expirationDate: expirationDate,
+                    expirationDate: shortenedExpirationDate,
                     securityNumber: securityNumber
                 )
             )
@@ -189,6 +201,21 @@ final class ContentViewModel: ObservableObject {
         return nil
     }
 
+    func expirationDateValidator(_ expirationDate: String) -> String? {
+        let expirationDate = expirationDate.removingWhitespaces()
+        let dateComponents = expirationDate.components(separatedBy: "/")
+        
+        guard dateComponents.count == 2 else {
+            return "Please enter Expiration Date"
+        }
+
+        guard isFutureDate(month: dateComponents[0], year: dateComponents[1]) else {
+            return "Please enter card that's expiration date in the future, not in past"
+        }
+
+        return nil
+    }
+
     func cvvValidator(_ cvv: String) -> String? {
         guard let cardBrand else { return nil }
         guard cvv.allSatisfy(\.isNumber) else {
@@ -259,6 +286,56 @@ private extension ContentViewModel {
         }
 
         return sum % 10 == 0
+    }
+
+    func isFutureDate(month: String, year: String) -> Bool {
+        // Ensure that the inputs are valid
+        guard let monthInt = Int(month), let yearInt = Int(year), monthInt >= 1, monthInt <= 12 else {
+            print("Invalid month or year input")
+            return false
+        }
+
+        // Get the current date components
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: currentDate)
+        let currentMonth = calendar.component(.month, from: currentDate)
+
+        // Compare year and month
+        if yearInt > currentYear {
+            return true
+        } else if yearInt == currentYear, monthInt >= currentMonth {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    func shortenYear(in expression: String) -> String? {
+        // Split the input string into components using the "/" separator
+        let components = expression.split(separator: "/")
+
+        // Ensure the input has exactly two components (month and year)
+        guard components.count == 2 else {
+            print("Invalid format")
+            return nil
+        }
+
+        let month = components[0]
+        let year = components[1]
+
+        // Ensure the year has at least four characters
+        print("Year: \(year)")
+        guard year.count == 4 else {
+            print("Invalid year format")
+            return nil
+        }
+
+        // Get the last two characters of the year
+        let shortYear = year.suffix(2)
+
+        // Combine the month and shortened year
+        return "\(month)/\(shortYear)"
     }
 
     func showErrorMessage(_ message: String) {
