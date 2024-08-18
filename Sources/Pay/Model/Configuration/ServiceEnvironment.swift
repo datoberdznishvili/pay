@@ -16,7 +16,7 @@ extension ServiceEnvironment {
     var baseURL: URL {
         let urlString = switch self {
         case .development: "https://paygate.payze.dev"
-        case .production: "https://paygate.payze.dev"
+        case .production: "https://paygate.payze.uz"
         }
 
         return URL(string: urlString)!
