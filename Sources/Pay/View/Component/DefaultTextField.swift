@@ -39,7 +39,7 @@ struct DefaultTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .foregroundColor(configuration.colorPalette.nextOnInteractive)
+                .foregroundColor(configuration.colorPalette.textPrimary)
                 .font(.caption)
                 .bold()
 
