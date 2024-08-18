@@ -61,7 +61,6 @@ public struct ColorPalette {
 extension Configuration {
     static var example: Self {
         Self(
-            font: .body,
             colorPalette: .init(),
             companyIcon: Image(.airbnb),
             environment: .development
