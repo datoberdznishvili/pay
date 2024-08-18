@@ -31,3 +31,20 @@ extension Currency {
         }
     }
 }
+
+// MARK: - Position
+extension Currency {
+    enum Position {
+        case beforeAmount
+        case afterAmount
+    }
+
+    var position: Position {
+        switch self {
+        case .usd:
+                .beforeAmount
+        case .uzs:
+                .afterAmount
+        }
+    }
+}

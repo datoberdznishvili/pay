@@ -17,6 +17,11 @@ public struct Money {
 
 extension Money {
     func formatted() -> String {
-        "\(currency.symbol)\(amount)"
+        switch currency.position {
+        case .beforeAmount:
+            "\(currency.symbol)\(amount)"
+        case .afterAmount:
+            "\(amount) \(currency.symbol)"
+        }
     }
 }

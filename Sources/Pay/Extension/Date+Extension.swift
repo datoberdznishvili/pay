@@ -12,4 +12,8 @@ extension Date {
     static var currentYear: Int {
         Calendar.current.component(.year, from: Date())
     }
+
+    static var currentMonth: Int {
+        Calendar.current.component(.month, from: Date())
+    }
 }

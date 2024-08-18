@@ -24,20 +24,20 @@ struct ContentView: View {
     @State private var cvv = ""
     @State private var cardHolderName = ""
 
-    // TODO: Change approach to be removed
     @State private var isNumberTextFieldEditing = false
     @State private var isExpirationDateTextFieldEditing = false
     @State private var isCVVTextFieldEditing = false
     @State private var isCardHolderNameTextFieldEditing = false
 
     @State private var isExpirationDatePickerPresented = false
-    @State private var selectedMonth = 6
+    @State private var selectedMonth = Date.currentMonth
     @State private var selectedYear = Date.currentYear
 
     @State private var isAlertPresented = false
     @State private var alertTitle = "Error occurred"
     @State private var alertMessage = ""
 
+    // MARK: - Init
     init(viewModel: ContentViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
