@@ -5,7 +5,7 @@
 //  Created by Giga Khizanishvili on 02.07.24.
 //
 
-enum Currency {
+public enum Currency {
     case usd
 
     init(backedName: String) {

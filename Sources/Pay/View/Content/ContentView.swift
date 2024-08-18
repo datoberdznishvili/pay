@@ -52,21 +52,7 @@ struct ContentView: View {
                 VStack {
                     Divider()
 
-                    if viewModel.amount == nil {
-                        VStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                    } else {
-                        VStack {
-                            contentBodyView
-                            Spacer()
-                            bottomView
-                        }
-                        .padding(.horizontal, 20)
-
-                    }
+                    contentView
                 }
 
                 if isExpirationDatePickerPresented {
@@ -110,7 +96,6 @@ struct ContentView: View {
             isWebViewPresented = false
             presentationMode.wrappedValue.dismiss()
         }
-        .onAppear(perform: viewModel.viewDidAppear)
         .alert(isPresented: $viewModel.isAlertPresented) {
             Alert(title: Text(viewModel.errorAlertMessage ?? "There is some problem."))
         }
@@ -126,6 +111,15 @@ struct ContentView: View {
 
 // MARK: - Components
 private extension ContentView {
+    var contentView: some View {
+        VStack {
+            contentBodyView
+            Spacer()
+            bottomView
+        }
+        .padding(.horizontal, 20)
+    }
+
     var contentBodyView: some View {
         VStack(spacing: 12) {
             bannerView
@@ -146,7 +140,7 @@ private extension ContentView {
                     .font(.caption)
                     .foregroundColor(configuration.colorPalette.textSecondary)
 
-                Text(viewModel.amount!.formatted())
+                Text(viewModel.amount.formatted())
                     .foregroundColor(configuration.colorPalette.textPrimary)
                     .bold()
             }
@@ -284,8 +278,6 @@ private extension ContentView {
             FooterView()
                 .padding(.bottom, 12)
         }
-        .frame(maxHeight: .infinity, alignment: .bottom)
-        .ignoresSafeArea(.keyboard)
     }
 
     // MARK: Next
@@ -316,6 +308,7 @@ private extension ContentView {
                         }
                     }
                     Text("Next")
+                        .foregroundColor(configuration.colorPalette.nextOnInteractive.opacity(0.4))
                 }
                 .foregroundColor(configuration.colorPalette.surface)
                 .padding()
@@ -371,7 +364,8 @@ private extension ContentView {
     NavigationView {
         ContentView(
             viewModel: ContentViewModel(
-                transactionId: "",
+                transactionId: UUID().uuidString,
+                amount: .init(amount: 123, currency: .usd),
                 successCompletionHandler: { },
                 failureCompletionHandler: { }
             )

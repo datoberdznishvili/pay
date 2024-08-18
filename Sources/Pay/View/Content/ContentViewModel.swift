@@ -36,46 +36,26 @@ final class ContentViewModel: ObservableObject {
     // MARK: - Published internal properties
     @Published var isLoading = false
     @Published var cardBrand: CardBrand?
-    @Published var amount: Money?
 
     @Published var errorAlertMessage: String?
     @Published var isAlertPresented = false
 
+    let amount: Money
+
     // MARK: - Init
     init(
         transactionId: String,
+        amount: Money,
         successCompletionHandler: @escaping () -> Void,
         failureCompletionHandler: @escaping () -> Void
     ) {
         self.transactionId = transactionId
+        self.amount = amount
         self.successCompletionHandler = successCompletionHandler
         self.failureCompletionHandler = failureCompletionHandler
     }
 
     // MARK: - Functions
-    func viewDidAppear() {
-        fetchTransactionDetails(for: transactionId)
-    }
-
-    func fetchTransactionDetails(for transactionId: String) {
-        Task {
-            let result = await getTransactionDetailsUseCase.execute(parameters: transactionId)
-
-            switch result {
-            case .success(let details):
-                DispatchQueue.main.async {
-                    self.amount = Money(
-                        amount: details.amount,
-                        currency: .init(backedName: details.currency)
-                    )
-                }
-            case .failure:
-                failureCompletionHandler()
-                dismissSubject.send(())
-            }
-        }
-    }
-
     func pay(
         number: String,
         cardHolder: String,

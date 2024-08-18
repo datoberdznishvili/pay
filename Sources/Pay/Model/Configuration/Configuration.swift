@@ -9,18 +9,15 @@ import SwiftUI
 import Combine
 
 final class Configuration: ObservableObject {
-    let font: Font // TODO: Use appropriate Font
     let colorPalette: ColorPalette
     let companyIcon: Image?
     let environment: ServiceEnvironment
 
     init(
-        font: Font,
         colorPalette: ColorPalette,
         companyIcon: Image? = nil,
         environment: ServiceEnvironment
     ) {
-        self.font = font
         self.colorPalette = colorPalette
         self.companyIcon = companyIcon
         self.environment = environment
@@ -38,7 +35,7 @@ public struct ColorPalette {
     let negative: Color
     let nextOnInteractive: Color
 
-    /// If no value is provided (nil) default colors will be used
+    /// If no value is provided (nil) default colours will be used
     public init(
         brand: MyColor? = nil,
         textPrimary: MyColor? = nil,

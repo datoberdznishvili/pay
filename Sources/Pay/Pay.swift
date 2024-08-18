@@ -8,13 +8,11 @@ public struct Pay {
     let configuration: Configuration
 
     public init(
-        font: Font,
         colorPalette: ColorPalette = .init(),
         companyIcon: Image? = nil,
         environment: ServiceEnvironment
     ) {
         self.configuration = Configuration(
-            font: font,
             colorPalette: colorPalette,
             companyIcon: companyIcon,
             environment: environment
@@ -24,13 +22,15 @@ public struct Pay {
     }
 
     public func present(
-        from sourceViewController: UIViewController,
+        on sourceViewController: UIViewController,
         transactionId: String,
+        amount: Money,
         successCompletionHandler: @escaping () -> Void,
         failureCompletionHandler: @escaping () -> Void
     ) {
         let viewModel = ContentViewModel(
             transactionId: transactionId,
+            amount: amount,
             successCompletionHandler: successCompletionHandler,
             failureCompletionHandler: failureCompletionHandler
         )
@@ -45,5 +45,4 @@ public struct Pay {
             animated: true
         )
     }
-
 }

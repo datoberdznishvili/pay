@@ -1,8 +1,8 @@
 //
 //  FooterView.swift
-//  Pay
 //
-//  Created by Giga Khizanishvili on 03.07.24.
+//
+//  Created by Giga Khizanishvili on 18.08.24.
 //
 
 import SwiftUI
