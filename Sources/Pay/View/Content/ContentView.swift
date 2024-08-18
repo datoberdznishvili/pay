@@ -40,8 +40,6 @@ struct ContentView: View {
 
     init(viewModel: ContentViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
-
-
     }
 
     // MARK: - Body
@@ -304,7 +302,7 @@ private extension ContentView {
                 viewModel.pay(
                     number: number,
                     cardHolder: cardHolderName,
-                    expirationDate: expirationDate,
+                    expirationDate: "\(selectedMonth)/\(selectedYear)",
                     securityNumber: cvv
                 )
             },

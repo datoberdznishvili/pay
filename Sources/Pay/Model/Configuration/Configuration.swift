@@ -36,7 +36,9 @@ public struct ColorPalette {
     let surface: Color
     let stroke: Color
     let negative: Color
+    let nextOnInteractive: Color
 
+    /// If no value is provided (nil) default colors will be used
     public init(
         brand: MyColor? = nil,
         textPrimary: MyColor? = nil,
@@ -44,7 +46,8 @@ public struct ColorPalette {
         background: MyColor? = nil,
         surface: MyColor? = nil,
         stroke: MyColor? = nil,
-        negative: MyColor? = nil
+        negative: MyColor? = nil,
+        nextOnInteractive: MyColor? = nil
     ) {
         self.brand = brand?.colorValue ?? Color("payBrand", bundle: .module)
         self.textPrimary = textPrimary?.colorValue ?? Color("payTextPrimary", bundle: .module)
@@ -53,6 +56,7 @@ public struct ColorPalette {
         self.surface = surface?.colorValue ?? Color("paySurface", bundle: .module)
         self.stroke = stroke?.colorValue ?? Color("payStroke", bundle: .module)
         self.negative = negative?.colorValue ?? Color("payNegative", bundle: .module)
+        self.nextOnInteractive = nextOnInteractive?.colorValue ?? Color("payNextOnInteractive", bundle: .module)
     }
 }
 

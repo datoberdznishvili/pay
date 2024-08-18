@@ -16,7 +16,7 @@ struct DefaultTextField: View {
 
     var title: String
     var placeHolder: String
-    // Value -> ErrorMessage
+    /// Value to validate -> ErrorMessage
     var validator: ((String) -> String?)?
 
     // MARK: - Init
@@ -39,15 +39,13 @@ struct DefaultTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .foregroundColor(configuration.colorPalette.textPrimary)
+                .foregroundColor(configuration.colorPalette.nextOnInteractive)
                 .font(.caption)
                 .bold()
 
             TextField(placeHolder, text: $text, onEditingChanged: { editing in
-                print("\(title) onEditingChanged to \(editing)")
                 self.isEditing = editing
                 if !isEditing {
-                    print("\(title) calling onEditingFinished")
                     self.errorMessage = validator?(text)
                 }
             })
