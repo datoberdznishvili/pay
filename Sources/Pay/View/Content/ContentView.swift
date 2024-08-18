@@ -217,7 +217,15 @@ private extension ContentView {
             .disabled(true)
             .onTapGesture {
                 withAnimation {
+                    hideKeyboard()
+
                     isExpirationDatePickerPresented = true
+                    
+                    isNumberTextFieldEditing = false
+                    isExpirationDateTextFieldEditing = false
+                    isCVVTextFieldEditing = false
+                    isCardHolderNameTextFieldEditing = false
+
                     updateExpirationDateText()
                 }
             }
