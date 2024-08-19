@@ -145,8 +145,8 @@ final class ContentViewModel: ObservableObject {
     }
 
     func webViewDidNavigate(to url: URL) {
-        guard url.pathComponents.count == 2 else { return }
         // `/` and `endpoint`
+        guard url.pathComponents.count == 2 else { return }
 
         if url.lastPathComponent == successDestinationEndpoint {
             successCompletionHandler()
@@ -205,7 +205,7 @@ final class ContentViewModel: ObservableObject {
             return "Please enter Expiration Date"
         }
 
-        guard isFutureDate(month: dateComponents[0], year: dateComponents[1]) else {
+        guard isNotPastDate(month: dateComponents[0], year: dateComponents[1]) else {
             return "Please enter card that's expiration date in the future, not in past"
         }
 
@@ -286,7 +286,7 @@ private extension ContentViewModel {
         return sum % 10 == 0
     }
 
-    func isFutureDate(month: String, year: String) -> Bool {
+    func isNotPastDate(month: String, year: String) -> Bool {
         // Ensure that the inputs are valid
         guard let monthInt = Int(month), let yearInt = Int(year), monthInt >= 1, monthInt <= 12 else {
             return false

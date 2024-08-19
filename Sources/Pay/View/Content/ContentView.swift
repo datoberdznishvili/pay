@@ -33,8 +33,8 @@ struct ContentView: View {
     @State private var selectedMonth = Date.currentMonth
     @State private var selectedYear = Date.currentYear
 
+    private let alertTitle = "Error"
     @State private var isAlertPresented = false
-    @State private var alertTitle = "Error occurred"
     @State private var alertMessage = ""
 
     // MARK: - Init
