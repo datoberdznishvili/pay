@@ -172,10 +172,11 @@ private extension ContentView {
     var numberTextField: some View {
         ZStack {
             DefaultTextField(
-                text: $number, 
+                text: $number,
                 isEditing: $isNumberTextFieldEditing,
                 title: "Number",
                 placeHolder: "Required",
+                icon: viewModel.cardBrand?.icon,
                 validator: viewModel.numberValidator(_:)
             )
             .keyboardType(.numberPad)
@@ -187,18 +188,6 @@ private extension ContentView {
                 viewModel.updateCardNumberPublisher.receive(on: DispatchQueue.main)
             ) { newCardNumber in
                 number = newCardNumber
-            }
-
-            if let cardBrand = viewModel.cardBrand {
-                HStack(alignment: .top) {
-                    Spacer()
-
-                    cardBrand.icon
-                        .resizable()
-                        .frame(width: 45, height: 22)
-                        .padding(.trailing)
-                        .padding(.top)
-                }
             }
         }
     }

@@ -16,6 +16,7 @@ struct DefaultTextField: View {
 
     var title: String
     var placeHolder: String
+    var icon: Image?
     /// Value to validate -> ErrorMessage
     var validator: ((String) -> String?)?
 
@@ -25,6 +26,7 @@ struct DefaultTextField: View {
         isEditing: Binding<Bool>,
         title: String,
         placeHolder: String,
+        icon: Image? = nil,
         validator: ((String) -> String?)? = nil
     ) {
         self._text = text
@@ -32,6 +34,7 @@ struct DefaultTextField: View {
 
         self.title = title
         self.placeHolder = placeHolder
+        self.icon = icon
         self.validator = validator
     }
 
@@ -43,37 +46,52 @@ struct DefaultTextField: View {
                 .font(.caption)
                 .bold()
 
-            TextField(placeHolder, text: $text, onEditingChanged: { editing in
-                self.isEditing = editing
-                if !isEditing {
-                    self.errorMessage = validator?(text)
+            ZStack {
+                TextField(placeHolder, text: $text, onEditingChanged: { editing in
+                    self.isEditing = editing
+                    if !isEditing {
+                        self.errorMessage = validator?(text)
+                    }
+                })
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(
+                            {
+                                if isEditing {
+                                    return configuration.colorPalette.brand
+                                }
+                                if errorMessage != nil {
+                                    return configuration.colorPalette.negative.opacity(0.3)
+                                }
+                                return configuration.colorPalette.stroke
+                            }(),
+                            lineWidth: 1
+                        )
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(configuration.colorPalette.surface)
+                                .shadow(
+                                    color: isEditing ? configuration.colorPalette.brand.opacity(0.4) : Color.clear,
+                                    radius: isEditing ? 4 : 0, x: 0, y: 0
+                                )
+                        )
+                )
+
+                if let icon {
+                    HStack {
+                        Spacer()
+
+                        // TODO: Find how to pass (any View) instead
+                        icon
+                            .resizable()
+                            .frame(width: 45, height: 22)
+                            .padding(.trailing)
+                    }
                 }
-            })
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(
-                        {
-                            if isEditing {
-                                return configuration.colorPalette.brand
-                            }
-                            if errorMessage != nil {
-                                return configuration.colorPalette.negative.opacity(0.3)
-                            }
-                            return configuration.colorPalette.stroke
-                        }(),
-                        lineWidth: 1
-                    )
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(configuration.colorPalette.surface)
-                            .shadow(
-                                color: isEditing ? configuration.colorPalette.brand.opacity(0.4) : Color.clear,
-                                radius: isEditing ? 4 : 0, x: 0, y: 0
-                            )
-                    )
-            )
+            }
+
 
             errorMessageLabel
         }
