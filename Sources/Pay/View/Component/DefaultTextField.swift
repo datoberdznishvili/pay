@@ -53,6 +53,11 @@ struct DefaultTextField: View {
                         self.errorMessage = validator?(text)
                     }
                 })
+                .onChange(of: text) { newValue in
+                    if validator?(text) == nil {
+                        errorMessage = nil
+                    }
+                }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(
