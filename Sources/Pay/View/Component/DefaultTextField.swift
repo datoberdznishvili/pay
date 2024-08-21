@@ -53,9 +53,6 @@ struct DefaultTextField: View {
             ZStack {
                 TextField(placeHolder, text: $text, onEditingChanged: { editing in
                     self.isEditing = editing
-                    if !isEditing {
-                        self.errorMessage = validator?(text)
-                    }
                 })
                 .onChange(of: text) { newValue in
                     if validator?(text) == nil {
@@ -63,6 +60,11 @@ struct DefaultTextField: View {
                     }
                     if let formatter {
                         text = formatter(newValue)
+                    }
+                }
+                .onChange(of: isEditing) { newValue in
+                    if !newValue {
+                        self.errorMessage = validator?(text)
                     }
                 }
                 .padding(.horizontal, 12)
