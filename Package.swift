@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Pay",
+    defaultLocalization: "en",
     platforms: [
        .iOS(.v14),
     ],
