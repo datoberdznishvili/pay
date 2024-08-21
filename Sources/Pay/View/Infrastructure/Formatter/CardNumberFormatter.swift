@@ -11,6 +11,7 @@ protocol CardNumberFormatter {
 
 final class DefaultCardNumberFormatter: CardNumberFormatter {
     func format(_ cardNumber: String, for brand: CardBrand) -> String {
+        let cardNumber = cardNumber.removingWhitespaces()
         let format = brand.format
         var result = ""
         var index = cardNumber.startIndex

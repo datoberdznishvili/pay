@@ -177,6 +177,7 @@ private extension ContentView {
                 title: "Number",
                 placeHolder: "Required",
                 icon: viewModel.cardBrand?.icon,
+                formatter: viewModel.cardNumberFormatter(_:),
                 validator: viewModel.numberValidator(_:)
             )
             .keyboardType(.numberPad)

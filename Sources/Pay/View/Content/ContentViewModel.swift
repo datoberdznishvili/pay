@@ -126,8 +126,6 @@ final class ContentViewModel: ObservableObject {
 
         let bin = bin.removingWhitespaces()
 
-        updateCardNumberUsingCardBrandFormat(bin)
-
         getCardBrandTask = Task {
             let result = await getCardBrandUseCase.execute(parameters: bin)
 
@@ -155,6 +153,12 @@ final class ContentViewModel: ObservableObject {
             failureCompletionHandler()
             dismissSubject.send()
         }
+    }
+
+    // MARK: - Formatter
+    func cardNumberFormatter(_ value: String) -> String {
+        let cardBrand = cardBrand ?? .visa
+        return cardNumberFormatter.format(value, for: cardBrand)
     }
 
     // MARK: - Validation
@@ -251,14 +255,6 @@ extension ContentViewModel {
 
 // MARK: - Private
 private extension ContentViewModel {
-    func updateCardNumberUsingCardBrandFormat(_ cardNumber: String) {
-        // Right now all cards have the same format, so we use any of them
-        let cardBrand = cardBrand ?? .visa
-
-        let formattedCardNumber = cardNumberFormatter.format(cardNumber, for: cardBrand)
-        updateCardNumberSubject.send(formattedCardNumber)
-    }
-
     func openWebView(withURL url: URL) {
         DispatchQueue.main.async {
             self.navigateToWebViewSubject.send((url))

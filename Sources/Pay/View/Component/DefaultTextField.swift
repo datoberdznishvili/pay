@@ -17,6 +17,8 @@ struct DefaultTextField: View {
     var title: String
     var placeHolder: String
     var icon: Image?
+    var formatter: ((String) -> String)?
+
     /// Value to validate -> ErrorMessage
     var validator: ((String) -> String?)?
 
@@ -27,6 +29,7 @@ struct DefaultTextField: View {
         title: String,
         placeHolder: String,
         icon: Image? = nil,
+        formatter: ((String) -> String)? = nil,
         validator: ((String) -> String?)? = nil
     ) {
         self._text = text
@@ -35,6 +38,7 @@ struct DefaultTextField: View {
         self.title = title
         self.placeHolder = placeHolder
         self.icon = icon
+        self.formatter = formatter
         self.validator = validator
     }
 
@@ -56,6 +60,9 @@ struct DefaultTextField: View {
                 .onChange(of: text) { newValue in
                     if validator?(text) == nil {
                         errorMessage = nil
+                    }
+                    if let formatter {
+                        text = formatter(newValue)
                     }
                 }
                 .padding(.horizontal, 12)
