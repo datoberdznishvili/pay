@@ -13,7 +13,7 @@ struct FooterView: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            Text("Powered By")
+            Text(LocalizationKey.Footer.title())
                 .foregroundColor(configuration.colorPalette.textSecondary)
 
             Image(.payze)

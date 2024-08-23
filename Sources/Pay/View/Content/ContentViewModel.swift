@@ -38,7 +38,7 @@ final class ContentViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var cardBrand: CardBrand?
 
-    @Published var errorAlertMessage: String?
+    @Published var errorAlertMessage = LocalizationKey.Error.Default.description()
     @Published var isAlertPresented = false
 
     let amount: Money
@@ -66,27 +66,24 @@ final class ContentViewModel: ObservableObject {
         let expirationDate = expirationDate.removingWhitespaces()
 
         if let numberErrorMessage = numberValidator(number) {
-            showErrorMessage("Number: \(numberErrorMessage)")
+            showErrorMessage(numberErrorMessage)
             return
         }
 
         if let cardHolderMessage = cardHolderNameValidator(cardHolder) {
-            showErrorMessage("CardHolder: \(cardHolderMessage)")
+            showErrorMessage(cardHolderMessage)
             return
         }
 
         if let expirationDateMessage = expirationDateValidator(expirationDate) {
-            showErrorMessage("Expiration Date: \(expirationDateMessage)")
+            showErrorMessage(expirationDateMessage)
             return
         }
 
-        guard let shortenedExpirationDate = shortenYear(in: expirationDate) else {
-            showErrorMessage("Please enter valid expiration date")
-            return
-        }
+        let shortenedExpirationDate = shortenYear(in: expirationDate)! // TODO: Problem
 
         if let securityNumberMessage = cvvValidator(securityNumber) {
-            showErrorMessage("CVV: \(securityNumberMessage)")
+            showErrorMessage(securityNumberMessage)
             return
         }
 
@@ -165,37 +162,34 @@ final class ContentViewModel: ObservableObject {
     func numberValidator(_ number: String) -> String? {
         let number = number.removingWhitespaces()
         if number.isEmpty {
-            return "This field should not be empty"
+            return LocalizationKey.CardNumber.errorMessage()
         }
 
         if number.count < 15 {
-            return "Please fill this field"
+            return LocalizationKey.CardNumber.errorMessage()
         }
         
         guard let cardBrand else { return nil }
 
         guard number.count == cardBrand.format.removingWhitespaces().count else {
-            return "Number's length should be \(cardBrand.format.removingWhitespaces().count)"
+            return LocalizationKey.CardNumber.errorMessage()
         }
 
         guard isValidCardNumber(number) else {
-            return "Please enter valid card number"
+            return LocalizationKey.CardNumber.errorMessage()
         }
 
         return nil
     }
 
     func cardHolderNameValidator(_ cardHolderName: String) -> String? {
-        guard !cardHolderName.isEmpty else {
-            return "This field should not be empty"
-        }
-
-        guard cardHolderName
+        guard !cardHolderName.isEmpty,
+              cardHolderName
             .components(separatedBy: " ")
             .filter({ !$0.isEmpty })
             .count >= 2
         else {
-            return "Please enter full card holder name"
+            return LocalizationKey.CardHolder.errorMessage()
         }
 
         return nil
@@ -206,11 +200,11 @@ final class ContentViewModel: ObservableObject {
         let dateComponents = expirationDate.components(separatedBy: "/")
         
         guard dateComponents.count == 2 else {
-            return "Please enter Expiration Date"
+            return LocalizationKey.ExpirationDate.errorMessage()
         }
 
         guard isNotPastDate(month: dateComponents[0], year: dateComponents[1]) else {
-            return "Please enter card that's expiration date in the future, not in past"
+            return LocalizationKey.ExpirationDate.errorMessage()
         }
 
         return nil
@@ -219,11 +213,11 @@ final class ContentViewModel: ObservableObject {
     func cvvValidator(_ cvv: String) -> String? {
         guard let cardBrand else { return nil }
         guard cvv.allSatisfy(\.isNumber) else {
-            return "Use only digits"
+            return LocalizationKey.CVV.errorMessage()
         }
         guard let cvvLength = cardBrand.cvvLength else { return nil }
         guard cvvLength == cvv.count else {
-            return "CVV should be length of \(cvvLength)"
+            return LocalizationKey.CVV.errorMessage()
         }
 
         return nil

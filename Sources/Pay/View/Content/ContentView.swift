@@ -33,7 +33,7 @@ struct ContentView: View {
     @State private var selectedMonth = Date.currentMonth
     @State private var selectedYear = Date.currentYear
 
-    private let alertTitle = "Error"
+    private let alertTitle = LocalizationKey.Error.Default.title()
     @State private var isAlertPresented = false
     @State private var alertMessage = ""
 
@@ -71,7 +71,7 @@ struct ContentView: View {
             Alert(
                 title: Text(alertTitle),
                 message: Text(alertMessage),
-                dismissButton: .default(Text("Got It"))
+                dismissButton: .default(Text("Got It")) // TODO: Not localized
             )
         }
         .onReceive(
@@ -95,14 +95,14 @@ struct ContentView: View {
             presentationMode.wrappedValue.dismiss()
         }
         .alert(isPresented: $viewModel.isAlertPresented) {
-            Alert(title: Text(viewModel.errorAlertMessage ?? "There is some problem."))
+            Alert(title: Text(viewModel.errorAlertMessage))
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 toolbarCloseButton
             }
         }
-        .navigationTitle("Enter Card")
+        .navigationTitle(LocalizationKey.NavigationHeader.title())
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -134,10 +134,10 @@ private extension ContentView {
             Spacer()
 
             VStack(alignment: configuration.companyIcon == nil ? .center : .trailing) {
-                Text("Amount")
+                Text(LocalizationKey.Banner.amount())
                     .font(.caption)
                     .foregroundColor(configuration.colorPalette.textSecondary)
-
+                
                 Text(viewModel.amount.formatted())
                     .foregroundColor(configuration.colorPalette.textPrimary)
                     .bold()
@@ -174,8 +174,8 @@ private extension ContentView {
             DefaultTextField(
                 text: $number,
                 isEditing: $isNumberTextFieldEditing,
-                title: "Number",
-                placeHolder: "Required",
+                title: LocalizationKey.CardNumber.title(),
+                placeHolder: "Required", // TODO: Not localized
                 icon: viewModel.cardBrand?.icon,
                 formatter: viewModel.cardNumberFormatter(_:),
                 validator: viewModel.numberValidator(_:)
@@ -199,8 +199,8 @@ private extension ContentView {
             DefaultTextField(
                 text: $expirationDate,
                 isEditing: $isExpirationDateTextFieldEditing,
-                title: "Expires",
-                placeHolder: "MM / YYYY",
+                title: LocalizationKey.ExpirationDate.title(),
+                placeHolder: "MM / YYYY", // TODO: Not localized
                 validator: viewModel.expirationDateValidator(_:)
             )
             .disabled(true)
@@ -243,8 +243,8 @@ private extension ContentView {
         DefaultTextField(
             text: $cvv, 
             isEditing: $isCVVTextFieldEditing,
-            title: "CVV",
-            placeHolder: "Security Code",
+            title: LocalizationKey.CVV.title(),
+            placeHolder: LocalizationKey.CVV.placeholder(),
             validator: viewModel.cvvValidator(_:)
         )
         .keyboardType(.numberPad)
@@ -261,8 +261,8 @@ private extension ContentView {
         DefaultTextField(
             text: $cardHolderName,
             isEditing: $isCardHolderNameTextFieldEditing,
-            title: "Card Holder Name",
-            placeHolder: "Name",
+            title: LocalizationKey.CardHolder.title(),
+            placeHolder: LocalizationKey.CardHolder.placeholder(),
             validator: viewModel.cardHolderNameValidator(_:)
         )
         .onChange(of: cardHolderName) { newValue in
@@ -306,7 +306,7 @@ private extension ContentView {
                             Spacer()
                         }
                     }
-                    Text("Next")
+                    Text(LocalizationKey.nextButtonTitle())
                         .foregroundColor(configuration.colorPalette.nextOnInteractive)
                 }
                 .foregroundColor(configuration.colorPalette.surface)
@@ -328,7 +328,7 @@ private extension ContentView {
                 presentationMode.wrappedValue.dismiss()
             },
             label: {
-                Text("Close")
+                Text(LocalizationKey.NavigationHeader.closeButtonTitle())
                     .foregroundColor(configuration.colorPalette.negative)
             }
         )
