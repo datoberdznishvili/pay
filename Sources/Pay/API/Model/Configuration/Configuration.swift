@@ -12,15 +12,18 @@ final class Configuration: ObservableObject {
     let colorPalette: ColorPalette
     let companyIcon: Image?
     let environment: ServiceEnvironment
+    let language: Language
 
     init(
         colorPalette: ColorPalette,
         companyIcon: Image? = nil,
-        environment: ServiceEnvironment
+        environment: ServiceEnvironment,
+        language: Language
     ) {
         self.colorPalette = colorPalette
         self.companyIcon = companyIcon
         self.environment = environment
+        self.language = language
     }
 }
 
@@ -63,7 +66,8 @@ extension Configuration {
         Self(
             colorPalette: .init(),
             companyIcon: Image(.airbnb),
-            environment: .development
+            environment: .development,
+            language: .english
         )
     }
 }

@@ -10,12 +10,14 @@ public struct Pay {
     public init(
         colorPalette: ColorPalette = .init(),
         companyIcon: Image? = nil,
-        environment: ServiceEnvironment
+        environment: ServiceEnvironment,
+        language: Language
     ) {
         self.configuration = Configuration(
             colorPalette: colorPalette,
             companyIcon: companyIcon,
-            environment: environment
+            environment: environment,
+            language: language
         )
 
         DependencyGraph.registerAllServices(using: configuration)
