@@ -42,13 +42,11 @@ public struct Pay {
             }
         )
 
-#if os(iOS)
         if UIDevice.current.userInterfaceIdiom == .phone {
             newViewController.modalPresentationStyle = .fullScreen
         } else if UIDevice.current.userInterfaceIdiom == .pad {
             newViewController.modalPresentationStyle = .formSheet
         }
-#endif
 
         sourceViewController.present(
             newViewController,

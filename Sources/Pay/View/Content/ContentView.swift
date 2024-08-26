@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
+    @State private var isPoweredBySectionVisible = true
 
     // MARK: - Properties
     @Environment(\.presentationMode) private var presentationMode
@@ -93,6 +95,16 @@ struct ContentView: View {
         ) {
             isWebViewPresented = false
             presentationMode.wrappedValue.dismiss()
+        }
+        .onReceive(keyboardWillShowPublisher) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                isPoweredBySectionVisible = false
+            }
+        }
+        .onReceive(keyboardWillHidePublisher) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                isPoweredBySectionVisible = true
+            }
         }
         .alert(isPresented: $viewModel.isAlertPresented) {
             Alert(title: Text(viewModel.errorAlertMessage))
@@ -274,8 +286,10 @@ private extension ContentView {
         VStack(spacing: 26) {
             nextButton
 
-            FooterView()
-                .padding(.bottom, 12)
+            if shouldShowFooterView {
+                FooterView()
+                    .padding(.bottom, 12)
+            }
         }
     }
 
@@ -320,6 +334,7 @@ private extension ContentView {
                 )
             }
         )
+        .padding(.bottom, shouldShowFooterView ? 0 : 16)
         .disabled(isDisabled)
     }
 
@@ -356,6 +371,22 @@ private extension ContentView {
 private extension ContentView {
     func updateExpirationDateText() {
         expirationDate = "\(selectedMonth.formattedToTwoDigits()) / \(selectedYear)"
+    }
+
+    var shouldShowFooterView: Bool {
+        isPoweredBySectionVisible || UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    var keyboardWillShowPublisher: AnyPublisher<Void, Never> {
+        NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
+            .map { _ in }
+            .eraseToAnyPublisher()
+    }
+
+    var keyboardWillHidePublisher: AnyPublisher<Void, Never> {
+        NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
+            .map { _ in }
+            .eraseToAnyPublisher()
     }
 }
 
