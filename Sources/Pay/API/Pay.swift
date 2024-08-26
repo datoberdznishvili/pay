@@ -41,7 +41,15 @@ public struct Pay {
                 ContentView(viewModel: viewModel)
             }
         )
-        newViewController.modalPresentationStyle = .fullScreen
+
+#if os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            newViewController.modalPresentationStyle = .fullScreen
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            newViewController.modalPresentationStyle = .formSheet
+        }
+#endif
+
         sourceViewController.present(
             newViewController,
             animated: true
