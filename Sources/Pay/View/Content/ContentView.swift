@@ -165,7 +165,7 @@ private extension ContentView {
     }
 
     var inputSection: some View {
-        VStack(alignment: .leading, spacing: 22) {
+        VStack(alignment: .leading, spacing: spacingForInputSection) {
             numberTextField
 
             HStack(alignment: .top) {
@@ -375,6 +375,14 @@ private extension ContentView {
 
     var shouldShowFooterView: Bool {
         isPoweredBySectionVisible || UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    var spacingForInputSection: CGFloat {
+        if UIScreen.main.bounds.height < 750 {
+            10
+        } else {
+            22
+        }
     }
 
     var keyboardWillShowPublisher: AnyPublisher<Void, Never> {
