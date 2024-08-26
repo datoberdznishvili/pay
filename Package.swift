@@ -22,7 +22,7 @@ let package = Package(
         .target(
             name: "Pay",
             resources: [
-                .process("Resources")
+                .process("Resources"),
             ]
         ),
         .testTarget(

@@ -2,8 +2,11 @@
 //  LocalizationKey.swift
 //
 //
-//  Created by Giga Khizanishvili on 22.08.24.
+//  Created by Giga Khizanishvili on 26.08.24.
 //
+
+import Foundation
+
 
 enum LocalizationKey: Localizable {
     enum Banner: Localizable {

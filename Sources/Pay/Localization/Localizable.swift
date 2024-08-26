@@ -11,7 +11,21 @@ protocol Localizable { }
 
 extension Localizable {
     func callAsFunction(_ args: any CVarArg...) -> String {
-        ""
+        @Injected var configuration: Configuration
+        
+        let languageIdentifier = switch configuration.language {
+        case .english: "en"
+        case .russian: "ru"
+        case .uzbekistan: "uz-UZ"
+        }
+
+        guard let path = Bundle.module.path(forResource: languageIdentifier, ofType: "lproj"),
+              let languageBundle = Bundle(path: path)
+        else {
+            return NSLocalizedString(name, bundle: .module, comment: "")
+        }
+
+        return NSLocalizedString(name, bundle: languageBundle, comment: "")
     }
 
     private var name: String {
