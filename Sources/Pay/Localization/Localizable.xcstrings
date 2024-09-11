@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Month" : {
+
+    },
     "pay.banner.amount" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -277,6 +280,29 @@
         }
       }
     },
+    "pay.expirationDate.done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подтверждать"
+          }
+        },
+        "uz-UZ" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasdiqlang"
+          }
+        }
+      }
+    },
     "pay.expirationDate.errorMessage" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -414,6 +440,32 @@
           }
         }
       }
+    },
+    "pay.webview.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verification"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Верификация"
+          }
+        },
+        "uz-UZ" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasdiqlash"
+          }
+        }
+      }
+    },
+    "Year" : {
+
     }
   },
   "version" : "1.0"

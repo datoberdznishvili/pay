@@ -131,7 +131,7 @@ final class ContentViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.cardBrand = cardBrand
                 }
-            case .failure(let error):
+            case .failure:
                 DispatchQueue.main.async {
                     self.cardBrand = nil
                 }
@@ -140,9 +140,6 @@ final class ContentViewModel: ObservableObject {
     }
 
     func webViewDidNavigate(to url: URL) {
-        
-        debugPrint(url, separator: "======")
-        
         guard
             let redirectUrlHost = url.host,
             let baseUrlHost = configuration.environment.baseURL.host,
@@ -150,10 +147,6 @@ final class ContentViewModel: ObservableObject {
         else {
             return
         }
-        
-        debugPrint("Redirect Url Host \(redirectUrlHost)")
-        debugPrint("Base Url Host \(baseUrlHost)")
-        debugPrint("Query \(url.pathComponents)")
         
         if url.pathComponents.contains(successDestinationEndpoint) {
             successCompletionHandler()

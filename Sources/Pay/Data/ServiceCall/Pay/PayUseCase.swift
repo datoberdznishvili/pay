@@ -5,8 +5,6 @@
 //  Created by Giga Khizanishvili on 12.07.24.
 //
 
-import Foundation // TODO: Remove
-
 // MARK: - Protocol
 protocol PayUseCase {
     func execute(parameters: PayParameters) async -> Result<PayResponse, NetworkError>

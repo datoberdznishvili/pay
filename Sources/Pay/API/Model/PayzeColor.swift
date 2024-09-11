@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-// TODO: Rename
-public struct MyColor {
+public struct PayzeColor {
     let light: UIColor
     let dark: UIColor
 

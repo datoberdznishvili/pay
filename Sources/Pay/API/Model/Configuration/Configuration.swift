@@ -40,14 +40,14 @@ public struct ColorPalette {
 
     /// If no value is provided (nil) default colours will be used
     public init(
-        brand: MyColor? = nil,
-        textPrimary: MyColor? = nil,
-        textSecondary: MyColor? = nil,
-        background: MyColor? = nil,
-        surface: MyColor? = nil,
-        stroke: MyColor? = nil,
-        negative: MyColor? = nil,
-        nextOnInteractive: MyColor? = nil
+        brand: PayzeColor? = nil,
+        textPrimary: PayzeColor? = nil,
+        textSecondary: PayzeColor? = nil,
+        background: PayzeColor? = nil,
+        surface: PayzeColor? = nil,
+        stroke: PayzeColor? = nil,
+        negative: PayzeColor? = nil,
+        nextOnInteractive: PayzeColor? = nil
     ) {
         self.brand = brand?.colorValue ?? Color("payBrand", bundle: .module)
         self.textPrimary = textPrimary?.colorValue ?? Color("payTextPrimary", bundle: .module)

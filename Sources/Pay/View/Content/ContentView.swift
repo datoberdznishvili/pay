@@ -72,8 +72,7 @@ struct ContentView: View {
         .alert(isPresented: $isAlertPresented) {
             Alert(
                 title: Text(alertTitle),
-                message: Text(alertMessage),
-                dismissButton: .default(Text("Got It")) // TODO: Not localized
+                message: Text(alertMessage)
             )
         }
         .onReceive(
@@ -105,9 +104,6 @@ struct ContentView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 isPoweredBySectionVisible = true
             }
-        }
-        .alert(isPresented: $viewModel.isAlertPresented) {
-            Alert(title: Text(viewModel.errorAlertMessage))
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -187,7 +183,7 @@ private extension ContentView {
                 text: $number,
                 isEditing: $isNumberTextFieldEditing,
                 title: LocalizationKey.CardNumber.title(),
-                placeHolder: "Required", // TODO: Not localized
+                placeHolder: "0000 0000 0000 0000",
                 icon: viewModel.cardBrand?.icon,
                 formatter: viewModel.cardNumberFormatter(_:),
                 validator: viewModel.numberValidator(_:)
@@ -212,7 +208,7 @@ private extension ContentView {
                 text: $expirationDate,
                 isEditing: $isExpirationDateTextFieldEditing,
                 title: LocalizationKey.ExpirationDate.title(),
-                placeHolder: "MM / YYYY", // TODO: Not localized
+                placeHolder: "MM / YYYY",
                 validator: viewModel.expirationDateValidator(_:)
             )
             .disabled(true)
@@ -360,6 +356,7 @@ private extension ContentView {
                         viewModel.webViewDidNavigate(to: url)
                     }
                 )
+                .navigationTitle(LocalizationKey.WebView.title())
             }(),
             isActive: $isWebViewPresented
         ) {

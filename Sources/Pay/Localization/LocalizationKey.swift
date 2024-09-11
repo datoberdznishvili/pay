@@ -41,6 +41,7 @@ enum LocalizationKey: Localizable {
     enum ExpirationDate: Localizable {
         case errorMessage
         case title
+        case done
     }
 
     enum Footer: Localizable {
@@ -53,4 +54,8 @@ enum LocalizationKey: Localizable {
     }
 
     case nextButtonTitle
+    
+    enum WebView: Localizable {
+        case title
+    }
 }

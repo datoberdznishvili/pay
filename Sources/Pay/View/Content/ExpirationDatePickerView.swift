@@ -60,11 +60,11 @@ struct ExpirationDatePickerView: View {
 private extension ExpirationDatePickerView {
     var headerView: some View {
         HStack(alignment: .center) {
-            Text("Choose expiration date")
+            Text(LocalizationKey.ExpirationDate.title())
 
             Spacer()
 
-            Button("Done") {
+            Button(LocalizationKey.ExpirationDate.done()) {
                 withAnimation {
                     isPresented = false
                 }
