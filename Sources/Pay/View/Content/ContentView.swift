@@ -317,7 +317,7 @@ private extension ContentView {
                         HStack {
                             ProgressView()
                                 .progressViewStyle(
-                                    CircularProgressViewStyle(tint: configuration.colorPalette.surface)
+                                    CircularProgressViewStyle(tint: configuration.colorPalette.nextOnInteractive)
                                 )
                             Spacer()
                         }
