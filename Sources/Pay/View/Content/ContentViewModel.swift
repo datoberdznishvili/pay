@@ -146,20 +146,19 @@ final class ContentViewModel: ObservableObject {
         guard
             let redirectUrlHost = url.host,
             let baseUrlHost = configuration.environment.baseURL.host,
-            redirectUrlHost.contains(baseUrlHost),
-            let query = url.query?.lowercased()
+            redirectUrlHost == baseUrlHost
         else {
             return
         }
         
         debugPrint("Redirect Url Host \(redirectUrlHost)")
         debugPrint("Base Url Host \(baseUrlHost)")
-        debugPrint("Query \(query)")
+        debugPrint("Query \(url.pathComponents)")
         
-        if query.contains(successDestinationEndpoint) {
+        if url.pathComponents.contains(successDestinationEndpoint) {
             successCompletionHandler()
             dismissSubject.send(())
-        } else if query.contains(failureDestinationEndpoint) {
+        } else if url.pathComponents.contains(failureDestinationEndpoint) {
             failureCompletionHandler()
             dismissSubject.send()
         }
