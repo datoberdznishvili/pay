@@ -105,6 +105,9 @@ struct ContentView: View {
                 isPoweredBySectionVisible = true
             }
         }
+        .alert(isPresented: $viewModel.isAlertPresented) {
+            Alert(title: Text(viewModel.errorAlertMessage))
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 toolbarCloseButton
