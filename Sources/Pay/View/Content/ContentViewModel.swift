@@ -17,8 +17,8 @@ final class ContentViewModel: ObservableObject {
 
     @Injected private var configuration: Configuration
 
-    private let successDestinationEndpoint = "Success"
-    private let failureDestinationEndpoint = "Fail"
+    private let successDestinationEndpoint = "success"
+    private let failureDestinationEndpoint = "fail"
 
     private let transactionId: String
     private let successCompletionHandler: () -> Void
@@ -140,13 +140,26 @@ final class ContentViewModel: ObservableObject {
     }
 
     func webViewDidNavigate(to url: URL) {
-        // `/` and `endpoint`
-        guard url.pathComponents.count == 2 else { return }
-
-        if url.lastPathComponent == successDestinationEndpoint {
+        
+        debugPrint(url, separator: "======")
+        
+        guard
+            let redirectUrlHost = url.host,
+            let baseUrlHost = configuration.environment.baseURL.host,
+            redirectUrlHost.contains(baseUrlHost),
+            let query = url.query?.lowercased()
+        else {
+            return
+        }
+        
+        debugPrint("Redirect Url Host \(redirectUrlHost)")
+        debugPrint("Base Url Host \(baseUrlHost)")
+        debugPrint("Query \(query)")
+        
+        if query.contains(successDestinationEndpoint) {
             successCompletionHandler()
             dismissSubject.send(())
-        } else if url.lastPathComponent == failureDestinationEndpoint {
+        } else if query.contains(failureDestinationEndpoint) {
             failureCompletionHandler()
             dismissSubject.send()
         }
