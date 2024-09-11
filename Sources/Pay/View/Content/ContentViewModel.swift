@@ -87,7 +87,10 @@ final class ContentViewModel: ObservableObject {
             return
         }
 
-        isLoading = true
+        DispatchQueue.main.async { [weak self] in
+            self?.isLoading = true
+        }
+
         Task {
             let result = await payUseCase.execute(
                 parameters: PayParameters(
