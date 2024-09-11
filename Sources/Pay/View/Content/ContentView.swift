@@ -316,8 +316,9 @@ private extension ContentView {
                     if viewModel.isLoading {
                         HStack {
                             ProgressView()
-                                .foregroundColor(.white)
-
+                                .progressViewStyle(
+                                    CircularProgressViewStyle(tint: configuration.colorPalette.surface)
+                                )
                             Spacer()
                         }
                     }
