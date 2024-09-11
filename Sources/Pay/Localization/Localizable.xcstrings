@@ -441,7 +441,7 @@
         }
       }
     },
-    "pay.webview.title" : {
+    "pay.webView.title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
