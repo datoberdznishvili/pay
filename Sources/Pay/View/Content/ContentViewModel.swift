@@ -143,6 +143,7 @@ final class ContentViewModel: ObservableObject {
     }
 
     func webViewDidNavigate(to url: URL) {
+        print("Did Redirect to \(url)")
         guard
             let redirectUrlHost = url.host,
             let baseUrlHost = configuration.environment.baseURL.host,
