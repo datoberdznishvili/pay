@@ -18,7 +18,6 @@ final class DependencyGraph {
 }
 
 // MARK: - Public API
-// TODO: Split
 extension DependencyGraph {
     static func registerAllServices(using configuration: Configuration) {
         DependencyGraph.shared.register(
