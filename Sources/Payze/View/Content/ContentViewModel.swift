@@ -97,41 +97,39 @@ final class ContentViewModel: ObservableObject {
                 )
             )
 
-            DispatchQueue.main.async {
-                self.isLoading = false
-            }
-
-            switch result {
-            case .success(let response):
-                switch response {
-                case .success:
-                    completionHandler(.success)
-                    dismissSubject.send(())
-                case .otpWasRequired(let url):
-                    openWebView(withURL: url)
+            DispatchQueue.main.async { [weak self] in
+                self?.isLoading = false
+                
+                switch result {
+                case .success(let response):
+                    switch response {
+                    case .success:
+                        self?.completionHandler(.success)
+                        self?.dismissSubject.send(())
+                    case .otpWasRequired(let url):
+                        self?.openWebView(withURL: url)
+                    }
+                case .failure(let error):
+                    self?.showErrorMessage(error.localizedDescription)
                 }
-            case .failure(let error):
-                showErrorMessage(error.localizedDescription)
             }
         }
     }
 
     func numberDidUpdate(to bin: String) {
         getCardBrandTask?.cancel()
-
+        
         let bin = bin.removingWhitespaces()
-
+        
         getCardBrandTask = Task {
             let result = await getCardBrandUseCase.execute(parameters: bin)
-
-            switch result {
-            case .success(let cardBrand):
-                DispatchQueue.main.async {
-                    self.cardBrand = cardBrand
-                }
-            case .failure:
-                DispatchQueue.main.async {
-                    self.cardBrand = nil
+            
+            DispatchQueue.main.async { [weak self] in
+                switch result {
+                case .success(let cardBrand):
+                    self?.cardBrand = cardBrand
+                case .failure:
+                    self?.cardBrand = nil
                 }
             }
         }
@@ -143,12 +141,14 @@ final class ContentViewModel: ObservableObject {
         guard let action = getUrlPathActionUseCase.execute(url: url) else {
             return
         }
-        completionHandler(action)
-        dismissSubject.send(())
+        DispatchQueue.main.async { [weak self] in
+            self?.completionHandler(action)
+            self?.dismissSubject.send(())
+        }
     }
 
     // MARK: - Formatter
-    func cardNumberFormatter(_ value: String) -> String {
+    func formatCardNumber(_ value: String) -> String {
         let cardBrand = cardBrand ?? .visa
         return cardNumberFormatter.format(value, for: cardBrand)
     }
@@ -246,9 +246,7 @@ extension ContentViewModel {
 private extension ContentViewModel {
     
     func openWebView(withURL url: URL) {
-        DispatchQueue.main.async {
-            self.navigateToWebViewSubject.send((url))
-        }
+        navigateToWebViewSubject.send((url))
     }
 
     func isValidCardNumber(_ cardNumber: String) -> Bool {

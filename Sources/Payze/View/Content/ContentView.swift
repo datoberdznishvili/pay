@@ -188,7 +188,7 @@ private extension ContentView {
                 title: LocalizationKey.CardNumber.title(),
                 placeHolder: "0000 0000 0000 0000",
                 icon: viewModel.cardBrand?.icon,
-                formatter: viewModel.cardNumberFormatter(_:),
+                formatter: viewModel.formatCardNumber(_:),
                 validator: viewModel.numberValidator(_:)
             )
             .keyboardType(.numberPad)
