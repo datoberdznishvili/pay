@@ -14,15 +14,12 @@ final class ContentViewModel: ObservableObject {
     @Injected private var payUseCase: PayUseCase
     @Injected private var getCardBrandUseCase: GetCardBrandUseCase
     @Injected private var getTransactionDetailsUseCase: GetTransactionDetailsUseCase
-
+    @Injected private var getUrlPathActionUseCase: GetUrlPathActionUseCase
+    
     @Injected private var configuration: Configuration
 
-    private let successDestinationEndpoint = "success"
-    private let failureDestinationEndpoint = "fail"
-
     private let transactionId: String
-    private let successCompletionHandler: () -> Void
-    private let failureCompletionHandler: () -> Void
+    private let completionHandler: (PaymentCompletionType) -> Void
 
     private var getCardBrandTask: Task<Void, Never>?
 
@@ -47,13 +44,11 @@ final class ContentViewModel: ObservableObject {
     init(
         transactionId: String,
         amount: Money,
-        successCompletionHandler: @escaping () -> Void,
-        failureCompletionHandler: @escaping () -> Void
+        completionHandler: @escaping (PaymentCompletionType) -> Void
     ) {
         self.transactionId = transactionId
         self.amount = amount
-        self.successCompletionHandler = successCompletionHandler
-        self.failureCompletionHandler = failureCompletionHandler
+        self.completionHandler = completionHandler
     }
 
     // MARK: - Functions
@@ -110,7 +105,7 @@ final class ContentViewModel: ObservableObject {
             case .success(let response):
                 switch response {
                 case .success:
-                    successCompletionHandler()
+                    completionHandler(.success)
                     dismissSubject.send(())
                 case .otpWasRequired(let url):
                     openWebView(withURL: url)
@@ -144,21 +139,12 @@ final class ContentViewModel: ObservableObject {
 
     func webViewDidNavigate(to url: URL) {
         print("Did Redirect to \(url)")
-        guard
-            let redirectUrlHost = url.host,
-            let baseUrlHost = configuration.environment.baseURL.host,
-            redirectUrlHost == baseUrlHost
-        else {
+        
+        guard let action = getUrlPathActionUseCase.execute(url: url) else {
             return
         }
-        
-        if url.pathComponents.contains(successDestinationEndpoint) {
-            successCompletionHandler()
-            dismissSubject.send(())
-        } else if url.pathComponents.contains(failureDestinationEndpoint) {
-            failureCompletionHandler()
-            dismissSubject.send()
-        }
+        completionHandler(action)
+        dismissSubject.send(())
     }
 
     // MARK: - Formatter
@@ -258,6 +244,7 @@ extension ContentViewModel {
 
 // MARK: - Private
 private extension ContentViewModel {
+    
     func openWebView(withURL url: URL) {
         DispatchQueue.main.async {
             self.navigateToWebViewSubject.send((url))

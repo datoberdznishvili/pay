@@ -32,7 +32,7 @@ struct ExpirationDatePickerView: View {
                 headerView
 
                 HStack {
-                    Picker("Month", selection: $selectedMonth) { // TODO: Localize
+                    Picker("Month", selection: $selectedMonth) {
                         ForEach(months, id: \.self) { month in
                             Text(month.formattedToTwoDigits())
                                 .tag(month)

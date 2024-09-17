@@ -18,6 +18,7 @@ final class DependencyGraph {
 }
 
 // MARK: - Public API
+// TODO: Split
 extension DependencyGraph {
     static func registerAllServices(using configuration: Configuration) {
         DependencyGraph.shared.register(
@@ -38,6 +39,12 @@ extension DependencyGraph {
             LocalGetCardBrandUseCase(),
             for: GetCardBrandUseCase.self
         )
+
+        DependencyGraph.shared.register(
+            DefaultGetUrlPathActionUseCase(),
+            for: GetUrlPathActionUseCase.self
+        )
+
         DependencyGraph.shared.register(
             DefaultGetTransactionDetailsUseCase(),
             for: GetTransactionDetailsUseCase.self

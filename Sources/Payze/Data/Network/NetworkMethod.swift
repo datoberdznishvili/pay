@@ -6,6 +6,6 @@
 //
 
 enum NetworkMethod: String {
-    case get
-    case post
+    case get = "GET"
+    case post = "POST"
 }

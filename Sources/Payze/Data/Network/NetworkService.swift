@@ -51,7 +51,7 @@ final class DefaultNetworkService: NetworkService {
         }
 
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = request.method.rawValue.uppercased()
+        urlRequest.httpMethod = request.method.rawValue
 
         if let bodyParameters = request.bodyParameters {
             urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: bodyParameters, options: [])

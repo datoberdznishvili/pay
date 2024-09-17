@@ -406,8 +406,9 @@ private extension ContentView {
             viewModel: ContentViewModel(
                 transactionId: UUID().uuidString,
                 amount: .init(amount: 123, currency: .usd),
-                successCompletionHandler: { },
-                failureCompletionHandler: { }
+                completionHandler: { type in
+                    print(type)
+                }
             )
         )
     }
