@@ -163,14 +163,14 @@ final class ContentViewModel: ObservableObject {
         if number.count < 15 {
             return LocalizationKey.CardNumber.errorMessage()
         }
-        
-        guard let cardBrand else { return nil }
 
-        guard number.count == cardBrand.format.removingWhitespaces().count else {
+        guard isValidCardNumber(number) else {
             return LocalizationKey.CardNumber.errorMessage()
         }
 
-        guard isValidCardNumber(number) else {
+        guard let cardBrand else { return nil }
+
+        guard number.count == cardBrand.format.removingWhitespaces().count else {
             return LocalizationKey.CardNumber.errorMessage()
         }
 
