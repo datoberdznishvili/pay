@@ -178,12 +178,7 @@ final class ContentViewModel: ObservableObject {
     }
 
     func cardHolderNameValidator(_ cardHolderName: String) -> String? {
-        guard !cardHolderName.isEmpty,
-              cardHolderName
-            .components(separatedBy: " ")
-            .filter({ !$0.isEmpty })
-            .count >= 2
-        else {
+        guard cardHolderName.contains(where: { $0.isLetter }) else {
             return LocalizationKey.CardHolder.errorMessage()
         }
 
