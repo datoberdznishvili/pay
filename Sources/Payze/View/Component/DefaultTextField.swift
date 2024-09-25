@@ -17,7 +17,7 @@ struct DefaultTextField: View {
         title: String,
         placeHolder: String,
         icon: Image? = nil,
-        isSecured: Bool = true,
+        isSecured: Bool = false,
         formatter: ((String) -> String)? = nil,
         validator: ((String) -> String?)? = nil
     ) {
@@ -79,7 +79,7 @@ struct NewDefaultTextField: View {
         title: String,
         placeHolder: String,
         icon: Image? = nil,
-        isSecured: Bool = true,
+        isSecured: Bool,
         formatter: ((String) -> String)? = nil,
         validator: ((String) -> String?)? = nil
     ) {
@@ -225,7 +225,7 @@ struct DeprecatedDefaultTextField: View {
         title: String,
         placeHolder: String,
         icon: Image? = nil,
-        isSecured: Bool = true,
+        isSecured: Bool,
         formatter: ((String) -> String)? = nil,
         validator: ((String) -> String?)? = nil
     ) {
