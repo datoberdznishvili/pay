@@ -136,8 +136,6 @@ final class ContentViewModel: ObservableObject {
     }
 
     func webViewDidNavigate(to url: URL) {
-        print("Did Redirect to \(url)")
-        
         guard let action = getUrlPathActionUseCase.execute(url: url) else {
             return
         }

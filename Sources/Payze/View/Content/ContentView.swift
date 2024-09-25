@@ -256,6 +256,7 @@ private extension ContentView {
             isEditing: $isCVVTextFieldEditing,
             title: LocalizationKey.CVV.title(),
             placeHolder: LocalizationKey.CVV.placeholder(),
+            isSecured: true,
             validator: viewModel.cvvValidator(_:)
         )
         .keyboardType(.numberPad)
