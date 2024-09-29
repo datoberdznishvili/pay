@@ -39,6 +39,9 @@ struct ContentView: View {
     @State private var isAlertPresented = false
     @State private var alertMessage = ""
 
+    @State private var cancellables: Set<AnyCancellable> = []
+
+
     // MARK: - Init
     init(viewModel: ContentViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
@@ -75,6 +78,15 @@ struct ContentView: View {
                 message: Text(alertMessage)
             )
         }
+        .onAppear {
+            viewModel.dismissPublisher
+                .receive(on: RunLoop.main)
+                .sink {
+                    self.isWebViewPresented = false
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+                .store(in: &cancellables)
+        }
         .onReceive(
             viewModel.errorPublisher
                 .receive(on: DispatchQueue.main)
@@ -87,13 +99,6 @@ struct ContentView: View {
         ) { url in
             urlForWebView = url
             isWebViewPresented = true
-        }
-        .onReceive(
-            viewModel.dismissPublisher
-                .receive(on: DispatchQueue.main)
-        ) {
-            isWebViewPresented = false
-            presentationMode.wrappedValue.dismiss()
         }
         .onReceive(keyboardWillShowPublisher) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
