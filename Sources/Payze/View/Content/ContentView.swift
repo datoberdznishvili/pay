@@ -140,7 +140,10 @@ private extension ContentView {
     // MARK: Banner
     var bannerView: some View {
         HStack {
-            configuration.companyIcon
+            configuration.companyIcon?
+                .resizable()
+                .frame(width: 122, height: 43)
+
 
             Spacer()
 
