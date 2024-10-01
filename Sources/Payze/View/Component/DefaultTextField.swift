@@ -149,7 +149,7 @@ struct NewDefaultTextField: View {
 
                         icon
                             .resizable()
-                            .frame(width: 45, height: 30.75)
+                            .frame(width: 32.2, height: 22)
                             .padding(.trailing)
                     }
                 }
